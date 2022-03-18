@@ -12,11 +12,10 @@ import frc.robot.BreakerMath;
 public class BreakerPigeon2 extends SubsystemBase {
   private WPI_Pigeon2 pigeon;
   private double imuInvert;
-  private boolean isInverted;
   private double pitch;
   private double yaw;
   private double roll;
-  private double [] wxyzDist = new double [3];
+  private double [] wxyzDist = new double [4];
   private double xSpeed;
   private double ySpeed;
   private double zSpeed;
@@ -24,17 +23,17 @@ public class BreakerPigeon2 extends SubsystemBase {
   /** Creates a new PigeonIMU. */
   public BreakerPigeon2(int deviceID, boolean isInverted) {
     pigeon = new WPI_Pigeon2(deviceID);
-    isInverted = this.isInverted;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
     if (isInverted) {
       imuInvert = -1;
     } else {
       imuInvert = 1;
     }
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+
     pitch = BreakerMath.constrainAngle(pigeon.getPitch());
     yaw = BreakerMath.constrainAngle(pigeon.getYaw()) * imuInvert;
     roll = BreakerMath.constrainAngle(pigeon.getRoll());
@@ -72,7 +71,7 @@ public class BreakerPigeon2 extends SubsystemBase {
   }
 
   public double getGyroRates(int arrayElement) {
-    double[] rawRates = new double[2];
+    double[] rawRates = new double[3];
     pigeon.getRawGyro(rawRates);
     return rawRates[arrayElement];
   }
