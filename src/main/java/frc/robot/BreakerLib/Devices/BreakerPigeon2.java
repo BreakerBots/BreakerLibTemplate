@@ -6,23 +6,30 @@ package frc.robot.BreakerLib.Devices;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BreakerMath;
+import frc.robot.BreakerLib.Util.BreakerMath;
 
+/* Good version of the CTRE Pigeon 2 class BAYBEEE! */
 public class BreakerPigeon2 extends SubsystemBase {
+
   private WPI_Pigeon2 pigeon;
+
   private double imuInvert;
+
   private double pitch;
   private double yaw;
   private double roll;
-  private double [] wxy = new double [3];
+  /* Coordinate array. w = angle, x = x-axis, y = y-axis*/
+  private double[] wxy = new double[3];
+
   private double xSpeed;
   private double ySpeed;
   private double zSpeed;
+
   private double prevTime;
 
-  /** Creates a new PigeonIMU. */
+  /** Creates a new PigeonIMU object. */
   public BreakerPigeon2(int deviceID, boolean isInverted) {
     pigeon = new WPI_Pigeon2(deviceID);
     if (isInverted) {
@@ -39,10 +46,11 @@ public class BreakerPigeon2 extends SubsystemBase {
     pitch = BreakerMath.constrainAngle(pigeon.getPitch());
     yaw = BreakerMath.constrainAngle(pigeon.getYaw()) * imuInvert;
     roll = BreakerMath.constrainAngle(pigeon.getRoll());
-    
+
     setName("IMU");
     addChild("Pigeon", pigeon);
-    
+
+    calculateGlobalPosition();
   }
 
   /** Returns pitch angle within +- 360 degrees */
@@ -72,6 +80,7 @@ public class BreakerPigeon2 extends SubsystemBase {
     pigeon.setYaw(0);
   }
 
+  /** Returns accelerometer value based on given index */
   public double getGyroRates(int arrayElement) {
     double[] rawRates = new double[3];
     pigeon.getRawGyro(rawRates);
@@ -91,38 +100,54 @@ public class BreakerPigeon2 extends SubsystemBase {
   }
 
   public short getRawAccelerometerVals(int arrayElement) {
-    short[] accelVals = new short[2];
+    short[] accelVals = new short[3];
     pigeon.getBiasedAccelerometer(accelVals);
     return accelVals[arrayElement];
   }
 
   public double getIns2AccelX() {
-    return (frc.robot.BreakerLib.Util.BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * 7.721772);
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * 7.721772);
   }
 
   public double getIns2AccelY() {
-    return (frc.robot.BreakerLib.Util.BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * 7.721772);
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * 7.721772);
   }
 
   public double getIns2AccelZ() {
-    return (frc.robot.BreakerLib.Util.BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * 7.721772);
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * 7.721772);
   }
 
-  private void calculate4DPosition() {
-    double curTime = getFPGATime();
+  private void calculateGlobalPosition() {
+    double curTime = RobotController.getFPGATime();
     double diffTime = curTime - prevTime;
-    double radYaw = (yaw * (Math.PI / 180));
-   // xSpeed += getIns2AccelX();
+    diffTime *= 0.000001;
+   // double diffTime = 0.02;
+    double radYaw = (yaw * (Math.PI / 180.0));
+    // xSpeed += getIns2AccelX();
     ySpeed += getIns2AccelY();
-    zSpeed += getIns2AccelZ();
+    // zSpeed += getIns2AccelZ();
     wxy[0] = yaw;
-    wxy[1] = ((ySpeed * Math.cos(radYaw)) * diffTime);
-    wxy[2] = ((ySpeed * Math.sin(radYaw)) * diffTime);
+    wxy[1] += ((ySpeed * Math.cos(radYaw)) * diffTime);
+    wxy[2] += ((ySpeed * Math.sin(radYaw)) * diffTime);
     prevTime = curTime;
   }
 
-  public double[] get4DPosition() {
+  public double[] getGlobalPosition() {
     return wxy;
+  }
+
+  public double getGlobalPositionComponents(int arrayElement) {
+    return wxy[arrayElement];
+  }
+
+  public void resetGlobalPosition() {
+    wxy[1] = 0;
+    wxy[2] = 0;
+    ySpeed = 0;
+  }
+
+  public int getPigeonUpTime() { 
+    return pigeon.getUpTime();
   }
 
   

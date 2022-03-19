@@ -6,9 +6,9 @@ package frc.robot.BreakerLib.Auto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.BreakerMath;
 import frc.robot.BreakerLib.Devices.BreakerPigeon2;
 import frc.robot.BreakerLib.SubsystemCores.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.Util.BreakerMath;
 
 /** Robot moves forward/back to target distance */
 public class AutoMoveStraight extends CommandBase {
@@ -19,6 +19,7 @@ public class AutoMoveStraight extends CommandBase {
   private double time;
   private AutoController auto;
   private BreakerWestCoastDrive driveTrain;
+  private double ticksPerInch;
   /** Autonomous command used to move the robot forward or backward a specified number of inches
    * 
    * @param driveArg Drive subsystem from RobotContainer
@@ -27,14 +28,14 @@ public class AutoMoveStraight extends CommandBase {
    * @param speedLimit the precent of max speed you wish the robot to be caped at (0.0 to 1.0) (DO NOT make argument negative) (WARNING: 7.0 or above is EXTREAMLY FAST)
    * @param secArg the time limit (in seconds) on this particular instance of this command befor it times out and cancles (safty feature to prevent accadents)
    */
-  public AutoMoveStraight(AutoController autoArg, BreakerWestCoastDrive driveTrainArg, BreakerPigeon2 imuArg, double distanceInches, double speedLimit, double secArg) {
+  public AutoMoveStraight(AutoController autoArg, BreakerWestCoastDrive driveTrainArg, BreakerPigeon2 imuArg, double distanceInches, double speedLimit, double secArg, double ticksPerInchArg) {
     time = secArg * 50; 
     auto = autoArg;
     imu = imuArg;
     driveTrain = driveTrainArg;
     targetDistance = distanceInches;
     speedClamp = speedLimit;
-
+    ticksPerInch = ticksPerInchArg;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -50,7 +51,7 @@ public class AutoMoveStraight extends CommandBase {
   @Override
   public void execute() {
     cyclecount ++;
-    double curDist = BreakerMath.ticksToInches(driveTrain.getLeftDriveTicks());
+    double curDist = BreakerMath.ticksToInches(driveTrain.getLeftDriveTicks(), ticksPerInch);
     System.out.println("Ticks: " + driveTrain.getLeftDriveTicks());
     double motorSpeed = auto.calculateMoveStraightPID(curDist, targetDistance);
     motorSpeed = MathUtil.clamp(motorSpeed, -speedClamp, speedClamp);
