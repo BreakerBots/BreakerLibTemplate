@@ -6,6 +6,7 @@ package frc.robot.BreakerLib.Devices;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerMath;
 
@@ -15,10 +16,11 @@ public class BreakerPigeon2 extends SubsystemBase {
   private double pitch;
   private double yaw;
   private double roll;
-  private double [] wxyzDist = new double [4];
+  private double [] wxy = new double [3];
   private double xSpeed;
   private double ySpeed;
   private double zSpeed;
+  private double prevTime;
 
   /** Creates a new PigeonIMU. */
   public BreakerPigeon2(int deviceID, boolean isInverted) {
@@ -106,14 +108,23 @@ public class BreakerPigeon2 extends SubsystemBase {
     return (frc.robot.BreakerLib.Util.BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * 7.721772);
   }
 
-  private void calculate4DDistance() {
-   wxyzDist[0] = yaw;
-   xSpeed += getIns2AccelX();
-   ySpeed += getIns2AccelY();
-   zSpeed += getIns2AccelZ();
-   wxyzDist[1] += xSpeed;
-   wxyzDist[2] += ySpeed;
-   wxyzDist[3] += zSpeed;
+  private void calculate4DPosition() {
+    double curTime = getFPGATime();
+    double diffTime = curTime - prevTime;
+    double radYaw = (yaw * (Math.PI / 180));
+   // xSpeed += getIns2AccelX();
+    ySpeed += getIns2AccelY();
+    zSpeed += getIns2AccelZ();
+    wxy[0] = yaw;
+    wxy[1] = ((ySpeed * Math.cos(radYaw)) * diffTime);
+    wxy[2] = ((ySpeed * Math.sin(radYaw)) * diffTime);
+    prevTime = curTime;
   }
+
+  public double[] get4DPosition() {
+    return wxy;
+  }
+
+  
 
 }
