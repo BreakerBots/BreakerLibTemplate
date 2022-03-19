@@ -28,6 +28,9 @@ public class BreakerPigeon2 extends SubsystemBase {
   private double zSpeed;
 
   private double prevTime;
+  private int cycleCount;
+  private double XAccelBias = 0;
+  private double YAccelBias = 0;
 
   /** Creates a new PigeonIMU object. */
   public BreakerPigeon2(int deviceID, boolean isInverted) {
@@ -50,6 +53,7 @@ public class BreakerPigeon2 extends SubsystemBase {
     setName("IMU");
     addChild("Pigeon", pigeon);
 
+    calculateAccelerometerBias();
     calculateGlobalPosition();
   }
 
@@ -99,21 +103,53 @@ public class BreakerPigeon2 extends SubsystemBase {
     return getGyroRates(2);
   }
 
+  public void calculateAccelerometerBias() {
+    cycleCount ++;
+    if (cycleCount < 150 && ((getIns2AccelY() < 2) && (getIns2AccelX() < 2))) {
+      YAccelBias = BreakerMath.getAvg(YAccelBias, getRawIns2AccelY(), cycleCount);
+      XAccelBias = BreakerMath.getAvg(XAccelBias, getRawIns2AccelX(), cycleCount);
+    }
+  }
+
+  public double getAccelXBias() {
+    if (cycleCount > 150) {
+      return XAccelBias;
+    } else {
+      return 0d;
+    }
+  }
+
+  public double getAccelYBias() {
+    if (cycleCount > 150) {
+      return YAccelBias;
+    } else {
+      return 0d;
+    }
+  }
+
   public short getRawAccelerometerVals(int arrayElement) {
     short[] accelVals = new short[3];
     pigeon.getBiasedAccelerometer(accelVals);
     return accelVals[arrayElement];
   }
 
-  public double getIns2AccelX() {
+  public double getRawIns2AccelX() {
     return (BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * 7.721772);
   }
 
-  public double getIns2AccelY() {
+  public double getIns2AccelX() {
+    return getRawIns2AccelX() - getAccelXBias();
+  }
+
+  public double getRawIns2AccelY() {
     return (BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * 7.721772);
   }
 
-  public double getIns2AccelZ() {
+  public double getIns2AccelY() {
+    return getRawIns2AccelY() - getAccelYBias();
+  }
+
+  public double getRawIns2AccelZ() {
     return (BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * 7.721772);
   }
 
@@ -144,6 +180,8 @@ public class BreakerPigeon2 extends SubsystemBase {
     wxy[1] = 0;
     wxy[2] = 0;
     ySpeed = 0;
+    xSpeed = 0;
+    zSpeed = 0;
   }
 
   public int getPigeonUpTime() { 

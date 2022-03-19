@@ -10,6 +10,7 @@ import frc.robot.BreakerLib.Devices.BreakerPigeon2;
 public class ExampleSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private BreakerPigeon2 imu;
+  int cycles;
 
   public ExampleSubsystem() {
     imu = new BreakerPigeon2(5, true);
@@ -18,11 +19,16 @@ public class ExampleSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    cycles ++;
     // This method will be called once per scheduler run
-    String outString = String.format("angle: %.3f X: %.3f Y: %.3f ACCEL X: %.3f ACCEL Y: %.3f\n",
-        imu.getGlobalPositionComponents(0), imu.getGlobalPositionComponents(1), imu.getGlobalPositionComponents(2),
-        imu.getIns2AccelX(), imu.getIns2AccelY());
+    String outString = String.format( " X: %.3f Y: %.3f ACCEL X: %.3f ACCEL Y: %.3f BIAS Y: %.3f BIAS X: %.3f\n",
+        imu.getGlobalPositionComponents(1), imu.getGlobalPositionComponents(2),
+        imu.getIns2AccelX(), imu.getIns2AccelY(), imu.getAccelYBias(), imu.getAccelXBias());
     System.out.println(outString);
+  //  if (cycles % 150 == 0) {
+  //    imu.reset();
+  //    imu.resetGlobalPosition();
+  //  }
   }
 
   @Override
