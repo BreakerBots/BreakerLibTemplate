@@ -54,11 +54,11 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
     return getLeftDriveTicks() / driveConfig.getTicksPerInch();
   }
 
-  public double getRightDriveInches() {
-    return getRightDriveTicks() / driveConfig.getTicksPerInch();
-  }
-
   public double getRightDriveTicks() {
     return rightLead.getSelectedSensorPosition();
+  }
+
+  public double getRightDriveInches() {
+    return getRightDriveTicks() / driveConfig.getTicksPerInch();
   }
 }

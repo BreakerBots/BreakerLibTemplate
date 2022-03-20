@@ -4,17 +4,12 @@
 
 package frc.robot.BreakerLib.devices;
 
-import java.lang.annotation.Retention;
-
-import org.opencv.osgi.OpenCVInterface;
-
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BreakerLimelight extends SubsystemBase {
   private double mountingAngle;
   private double mountingHeight;
-  private double targetHeight;
   private String limelightName;
   private LimelightTarget currentTarget;
   /** Creates an new vision prossesing limelight
