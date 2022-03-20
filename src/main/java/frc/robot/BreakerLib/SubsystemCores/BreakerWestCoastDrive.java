@@ -16,12 +16,12 @@ public class BreakerWestCoastDrive extends SubsystemBase {
   private WPI_TalonFX leftLead;
   private WPI_TalonFX rightLead;
 
-  public WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers) {
+  public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
     return controllers;
   }
   
-  /** Creates a new Drive. */
-  public BreakerWestCoastDrive(WPI_TalonFX[] leftMotors, Boolean invertL, WPI_TalonFX[] rightMotors, Boolean invertR) {
+  /** Creates a new West Coast Drive. */
+  public BreakerWestCoastDrive(WPI_TalonFX[] leftMotors, boolean invertL, WPI_TalonFX[] rightMotors, boolean invertR) {
     leftDrive = new MotorControllerGroup(leftLead, leftMotors);
     leftDrive.setInverted(invertL);
     leftLead = leftMotors[0];

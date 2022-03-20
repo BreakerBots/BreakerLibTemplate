@@ -21,11 +21,10 @@ public class ExampleSubsystem extends SubsystemBase {
   public void periodic() {
     cycles ++;
     // This method will be called once per scheduler run
-    String outString = String.format( " X: %.3f Y: %.3f ACCEL X: %.3f ACCEL Y: %.3f BIAS Y: %.3f BIAS X: %.3f\n",
-        imu.getGlobalPositionComponents(1), imu.getGlobalPositionComponents(2),
-        imu.getIns2AccelX(), imu.getIns2AccelY(), imu.getAccelYBias(), imu.getAccelXBias());
-    System.out.println(outString);
-  //  if (cycles % 150 == 0) {
+    String outString = String.format( " Y: %.3f ACCEL Y: %.3f RAW ACCEL Y: %.10s \n",
+         imu.getGlobalPositionComponents(2), imu.getIns2AccelY(), imu.getRawAccelerometerVals(1));
+    System.out.println(outString + " Bias Y: " + imu.getAccelYBias());
+  //  if (cycles % 300 == 0) {
   //    imu.reset();
   //    imu.resetGlobalPosition();
   //  }

@@ -4,9 +4,12 @@ import java.util.function.IntToDoubleFunction;
 import java.util.function.ToDoubleFunction;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.RobotController;
 
 //easily accessible conversion equations
 public class BreakerMath {
+
+    private static double prevTime = 0;
 
     // Drive logistic curve constants
 
@@ -20,15 +23,43 @@ public class BreakerMath {
     private static double b = 0.15;
 
     /**
-     * @param deg Angle value, in degrees
-     * @return angle value within -360 to +360 degrees.
+     * Constrains an angle value in degrees within +- 360 degrees.
+     * 
+     * @param deg Angle value in degrees.
+     * 
+     * @return Angle value within -360 to +360 degrees.
      */
-    public static final double constrainAngle(double deg) {
-        return deg % 360;
+    public static final double angleModulus(double deg) {
+        return angleModulus(deg, 360);
     }
 
-    public static double getCircumferenceFromRadus(double radus) {
-        return (2 * radus) * Math.PI;
+    /**
+     * Constrains an angle value in degrees within +- desired constraint, in degrees
+     * 
+     * @param deg        Angle value in degrees.
+     * @param constraint Degree value to constrain angle within.
+     * 
+     * @return Angle value within -constraint to +constraint degrees.
+     */
+    public static final double angleModulus(double deg, double constraint) {
+        return deg % constraint;
+    }
+
+    /**
+     * Gets the amount of time in seconds between cycles.
+     * 
+     * @return Time difference between cycles, in seconds.
+     */
+    public static double getCycleDiffTime() {
+        double curTime = RobotController.getFPGATime(); // In microseconds
+        double diffTime = curTime - prevTime;
+        prevTime = curTime;
+        diffTime = BreakerUnits.microsecondsToSeconds(diffTime); // Value converted to seconds
+        return diffTime;
+    }
+
+    public static double getCircumferenceFromRadus(double radius) {
+        return (2 * radius) * Math.PI;
     }
 
     public static double getCircumferenceFromDiameter(double diameter) {
@@ -43,7 +74,6 @@ public class BreakerMath {
         return getTicksPerRotation(encoderTicks, gearRatioTo1) / getCircumferenceFromDiameter(wheelDiameter);
     }
 
-    
     /**
      * @param ticks Talon FX encoder ticks.
      * @return distance, in inches.
