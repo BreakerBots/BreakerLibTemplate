@@ -1,8 +1,5 @@
 package frc.robot.BreakerLib.util;
 
-import java.util.function.IntToDoubleFunction;
-import java.util.function.ToDoubleFunction;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotController;
 

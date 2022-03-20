@@ -4,7 +4,7 @@
 
 package frc.robot.BreakerLib.subsystemcores.Drivetrain.WestCoastDrive;
 
-import frc.robot.BreakerLib.Util.BreakerMath;
+import frc.robot.BreakerLib.util.BreakerMath;
 
 /** Add your docs here. */
 public class BreakerWestCoastDriveConfig {
