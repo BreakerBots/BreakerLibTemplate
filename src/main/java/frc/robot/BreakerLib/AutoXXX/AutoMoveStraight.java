@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.BreakerLib.Auto;
+package frc.robot.BreakerLib.AutoXXX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.BreakerLib.Devices.BreakerPigeon2;
-import frc.robot.BreakerLib.SubsystemCores.Drivetrain.BreakerWestCoastDrive;
-import frc.robot.BreakerLib.Util.BreakerMath;
+import frc.robot.BreakerLib.DevicesXXX.BreakerPigeon2;
+import frc.robot.BreakerLib.SubsystemCoresXXX.Drivetrain.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.UtilXXX.BreakerMath;
 
 /** Robot moves forward/back to target distance */
 public class AutoMoveStraight extends CommandBase {
