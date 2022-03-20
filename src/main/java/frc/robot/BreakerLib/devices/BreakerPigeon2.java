@@ -5,8 +5,8 @@ package frc.robot.BreakerLib.devices;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.BreakerLib.Util.BreakerMath;
-import frc.robot.BreakerLib.Util.BreakerUnits;
+import frc.robot.BreakerLib.util.BreakerMath;
+import frc.robot.BreakerLib.util.BreakerUnits;
 /* Good version of the CTRE Pigeon 2 class BAYBEEE! */
 public class BreakerPigeon2 extends SubsystemBase {
   private WPI_Pigeon2 pigeon;
