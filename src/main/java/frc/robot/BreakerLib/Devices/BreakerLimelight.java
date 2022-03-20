@@ -86,7 +86,7 @@ public class BreakerLimelight extends SubsystemBase {
 
     public double getTargetDistance() {
       double camHeight = Constants.HUB_HEIGHT_INS - Constants.SHOOT_CAM_HEIGHT;
-      double corTarAng = Constants.SHOOT_CAM_ANG + getTargetInfo("ty");
+      double corTarAng = Constants.SHOOT_CAM_ANG + getTargetOffsetY();
       return (camHeight / Math.tan(corTarAng));
     }
   }

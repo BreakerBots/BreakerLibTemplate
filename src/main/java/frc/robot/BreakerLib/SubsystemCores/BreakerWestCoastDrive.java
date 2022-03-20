@@ -18,7 +18,6 @@ public class BreakerWestCoastDrive extends SubsystemBase {
   private MotorControllerGroup leftDrive;
   private MotorControllerGroup rightDrive;
   private DifferentialDrive diffDrive;
-  private DifferentialDriveOdometry driveOdometer;
 
   public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
     return controllers;
