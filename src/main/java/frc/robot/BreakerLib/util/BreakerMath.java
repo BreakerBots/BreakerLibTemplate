@@ -1,4 +1,4 @@
-package frc.robot.BreakerLib.UtilXXX;
+package frc.robot.BreakerLib.util;
 
 import java.util.function.IntToDoubleFunction;
 import java.util.function.ToDoubleFunction;
