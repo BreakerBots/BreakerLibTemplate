@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.Drivetrain.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerDiffDriveOdometry{
 
@@ -27,7 +28,7 @@ public class BreakerDiffDriveOdometry{
 
     /** Updates the odometer position. Use via {@link UpdateDiffDriveOdometer}. */
     public void update() {
-        driveOdometer.update(yawToRotation2d(), drivetrain.getLeftDriveTicks(), drivetrain.getRightDriveTicks());
+        driveOdometer.update(yawToRotation2d(), BreakerUnits.inchesToMeters(drivetrain.getLeftDriveInches()), BreakerUnits.inchesToMeters(drivetrain.getRightDriveInches()));
     }
 
     /** Returns current 2d position as an array of doubles.
