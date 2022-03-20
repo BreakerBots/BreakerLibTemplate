@@ -5,29 +5,35 @@
 package frc.robot.BreakerLib.SubsystemCores;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BreakerWestCoastDrive extends SubsystemBase {
+  private WPI_TalonFX leftLead;
+  private WPI_TalonFX rightLead;
   private MotorControllerGroup leftDrive;
   private MotorControllerGroup rightDrive;
   private DifferentialDrive diffDrive;
-  private WPI_TalonFX leftLead;
-  private WPI_TalonFX rightLead;
+  private DifferentialDriveOdometry driveOdometer;
 
   public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
     return controllers;
   }
   
   /** Creates a new West Coast Drive. */
-  public BreakerWestCoastDrive(WPI_TalonFX[] leftMotors, boolean invertL, WPI_TalonFX[] rightMotors, boolean invertR) {
+  public BreakerWestCoastDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR) {
     leftDrive = new MotorControllerGroup(leftLead, leftMotors);
     leftDrive.setInverted(invertL);
     leftLead = leftMotors[0];
+
     rightDrive = new MotorControllerGroup(rightLead, rightMotors);
     rightDrive.setInverted(invertR);
     rightLead = rightMotors[0];
+
     diffDrive = new DifferentialDrive(leftDrive, rightDrive);
   }
 
