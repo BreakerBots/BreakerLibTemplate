@@ -6,6 +6,12 @@ public class BreakerUnits {
     public static final double MICROSECONDS_PER_SECOND = 1000000;
     public static final double METERS_PER_SECOND_SQUARED_IN_G = 9.80665;
     public static final double INCHES_PER_SECOND_SQUARED_IN_G = 386.088583;
+    public static final double MILLIMETERS_PER_INCH = 25.4;
+    public static final double MILLIMETERS_PER_METER = 1000;
+    public static final double METERS_PER_YARD = 0.9144;
+    public static final double INCHES_PER_YARD = 36;
+
+    
 
     /**
      * Converts given microseconds to seconds.
@@ -73,5 +79,16 @@ public class BreakerUnits {
      */
     public static double inchesPerSecondSquaredToGs(double inchesPerSecondSquared) {
         return inchesPerSecondSquared / INCHES_PER_SECOND_SQUARED_IN_G;
+    }
+
+    public static double inchesToMeters(double inches) {
+        return ((inches * MILLIMETERS_PER_INCH) / MILLIMETERS_PER_METER);
+    }
+
+    public static double metersToYards(double meters) {
+        return meters / METERS_PER_YARD;
+    }
+    public static double metersToInches(double meters) {
+        return metersToYards(meters) * INCHES_PER_YARD;
     }
 }
