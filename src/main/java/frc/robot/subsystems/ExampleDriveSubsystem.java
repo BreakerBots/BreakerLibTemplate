@@ -24,7 +24,7 @@ public class ExampleDriveSubsystem extends SubsystemBase {
   WPI_TalonFX right3;
   WPI_TalonFX[] leftMotors;
   WPI_TalonFX[] rightMotors;
-  
+
   public ExampleDriveSubsystem() {
     left1 = new WPI_TalonFX(0);
     left2 = new WPI_TalonFX(0);
@@ -36,7 +36,7 @@ public class ExampleDriveSubsystem extends SubsystemBase {
     leftMotors = BreakerWestCoastDrive.createMotorArray(left1, left2, left3);
     rightMotors = BreakerWestCoastDrive.createMotorArray(right1, right2, right3);
     
-    driveConfig = new BreakerWestCoastDriveConfig(0, 0, 0);
+    driveConfig = new BreakerWestCoastDriveConfig(2048, 0, 0);
     drivetrain = new BreakerWestCoastDrive(leftMotors, rightMotors, false, true, driveConfig);
   }
 
