@@ -8,15 +8,14 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDriveConfig;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 
 /** Add your docs here. */
 public class DiffTrajectoryAutoController {
     TrajectoryConfig Config;
     DifferentialDriveVoltageConstraint voltageConstraints;
-    BreakerWestCoastDrive drivetrain;
-    public DiffTrajectoryAutoController(BreakerWestCoastDrive drivetrain) {
+    BreakerDiffDrive drivetrain;
+    public DiffTrajectoryAutoController(BreakerDiffDrive drivetrain) {
         voltageConstraints = new DifferentialDriveVoltageConstraint(drivetrain.getFeedforward(), drivetrain.getKinematics(), 0);
         Config = new TrajectoryConfig(maxVelocityMetersPerSecond, maxAccelerationMetersPerSecondSq);
             Config.setKinematics(drivetrain.getKinematics());

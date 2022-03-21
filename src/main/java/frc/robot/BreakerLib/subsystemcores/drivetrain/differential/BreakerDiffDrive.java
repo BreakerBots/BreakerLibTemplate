@@ -14,11 +14,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.BreakerMotorControle;
 
 public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
@@ -123,7 +123,13 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
 
   public PIDController getRightPIDController() {
     return driveConfig.getRightPID();
+  }
+
   public double getRightDriveMeters() {
     return Units.inchesToMeters(getRightDriveInches());
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
   }
 }

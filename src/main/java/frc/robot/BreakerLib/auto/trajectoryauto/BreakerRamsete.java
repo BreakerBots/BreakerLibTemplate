@@ -9,22 +9,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.BreakerLib.odometry.BreakerDiffDriveOdometry;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 
 /** Add your docs here. */
 public class BreakerRamsete {
     RamseteCommand ramsete;
     RamseteController ramseteController;
-    BreakerWestCoastDrive drivetrain;
+    BreakerDiffDrive drivetrain;
     DifferentialDriveWheelSpeeds wheelSpeeds;
     BreakerDiffDriveOdometry odometry;
-    public BreakerRamsete(BreakerWestCoastDrive drivetrain, BreakerDiffDriveOdometry odometry, Trajectory trajectoryToFollow){
+    public BreakerRamsete(BreakerDiffDrive drivetrain, BreakerDiffDriveOdometry odometry, Trajectory trajectoryToFollow, Subsystem subsystemRequirements){
         drivetrain = this.drivetrain;
         odometry = this.odometry;
-        wheelSpeeds = new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond)
         ramseteController = new RamseteController(b, zeta)
         ramsete = new RamseteCommand(trajectoryToFollow, odometry :: getPoseMeters, ramseteController, drivetrain.getFeedforward(), 
-        drivetrain.getKinematics(), wheelSpeeds, drivetrain.getLeftPIDController(), drivetrain.getRightPIDController(), drivetrain :: tankMoveVoltage, drivetrain);
+        drivetrain.getKinematics(), drivetrain :: getWheelSpeeds, drivetrain.getLeftPIDController(), drivetrain.getRightPIDController(), drivetrain :: tankMoveVoltage, subsystemRequirements);
     }
 }
