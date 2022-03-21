@@ -14,12 +14,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerMotorControle;
 
-public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
+public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
   private WPI_TalonFX rightLead;
   private MotorControllerGroup leftDrive;
@@ -27,14 +28,14 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX[] leftMotors;
   private WPI_TalonFX[] rightMotors;
   private DifferentialDrive diffDrive;
-  private BreakerWestCoastDriveConfig driveConfig;
+  private BreakerDiffDriveConfig driveConfig;
 
   public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
     return controllers;
   }
   
   /** Creates a new West Coast Drive. */
-  public BreakerWestCoastDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerWestCoastDriveConfig driveConfig) {
+  public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerDiffDriveConfig driveConfig) {
     leftDrive = new MotorControllerGroup(leftLead, leftMotors);
     leftDrive.setInverted(invertL);
     leftLead = leftMotors[0];
@@ -75,6 +76,10 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
 
   public double getLeftDriveInches() {
     return getLeftDriveTicks() / driveConfig.getTicksPerInch();
+  }
+
+  public double getLeftDriveMeters() {
+    return Units.inchesToMeters(getLeftDriveInches());
   }
 
   public double getRightDriveTicks() {
@@ -118,5 +123,7 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
 
   public PIDController getRightPIDController() {
     return driveConfig.getRightPID();
+  public double getRightDriveMeters() {
+    return Units.inchesToMeters(getRightDriveInches());
   }
 }

@@ -15,7 +15,7 @@ public class AutoPivot extends CommandBase {
   double target;
   double speedClamp;
   double lastAngle;
-  BreakerWestCoastDrive drivetrain;
+  BreakerDiffDrive drivetrain;
   /** Autonomous command used to turn the robot in place a specified number of degrees 
    * relative to the direction in which it was facing when the command is first called 
    * 
@@ -24,7 +24,7 @@ public class AutoPivot extends CommandBase {
    * @param targetDegrees the number of degrees you want the robot to turn relative to its orientation on command start (+ is right and - is left)
    * @param speedLimit the precent of max speed you wish the robot to be caped at (0.0 to 1.0) (DO NOT make argument negative) (NOTE: 3.0 or below tends to be quite slow)
    */
-  public AutoPivot(AutoController autoArg, BreakerWestCoastDrive drivetrainArg, BreakerPigeon2 imuArg, double targetDegrees, double speedLimit) {
+  public AutoPivot(AutoController autoArg, BreakerDiffDrive drivetrainArg, BreakerPigeon2 imuArg, double targetDegrees, double speedLimit) {
     auto = autoArg;
     drivetrain = drivetrainArg;
     imu = imuArg;

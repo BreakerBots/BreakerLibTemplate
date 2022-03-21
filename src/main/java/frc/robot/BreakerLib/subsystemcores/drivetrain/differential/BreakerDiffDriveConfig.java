@@ -11,7 +11,7 @@ import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 /** Add your docs here. */
-public class BreakerWestCoastDriveConfig {
+public class BreakerDiffDriveConfig {
     DifferentialDriveKinematics kinematics;
     private double robotTrackWidthInches;
     private double encoderTicks;
@@ -25,11 +25,11 @@ public class BreakerWestCoastDriveConfig {
     private double feedForwardKa;
     private PIDController leftPID;
     private PIDController rightPID;
-    public BreakerWestCoastDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter, 
+    public BreakerDiffDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter) { 
         double feedForwardKs, double feedForwardKv, double feedForwardKa, double robotTrackWidthInches, PIDController leftPID, PIDController rightPID) {
         
         kinematics = new DifferentialDriveKinematics(BreakerUnits.inchesToMeters(robotTrackWidthInches));
-
+    
         ticksPerInch = BreakerMath.getTicksPerInch(encoderTicks, gearRatioTo1, wheelDiameter);
         wheelDiameter = BreakerMath.getCircumferenceFromDiameter(wheelDiameter);
         getTicksPerWheelRotation = BreakerMath.getTicksPerRotation(encoderTicks, gearRatioTo1);

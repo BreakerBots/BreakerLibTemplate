@@ -18,7 +18,7 @@ public class AutoMoveStraight extends CommandBase {
   private double speedClamp;
   private double time;
   private AutoController auto;
-  private BreakerWestCoastDrive driveTrain;
+  private BreakerDiffDrive driveTrain;
   private double ticksPerInch;
   /** Autonomous command used to move the robot forward or backward a specified number of inches
    * 
@@ -28,7 +28,7 @@ public class AutoMoveStraight extends CommandBase {
    * @param speedLimit the precent of max speed you wish the robot to be caped at (0.0 to 1.0) (DO NOT make argument negative) (WARNING: 7.0 or above is EXTREAMLY FAST)
    * @param secArg the time limit (in seconds) on this particular instance of this command befor it times out and cancles (safty feature to prevent accadents)
    */
-  public AutoMoveStraight(AutoController autoArg, BreakerWestCoastDrive driveTrainArg, BreakerPigeon2 imuArg, double distanceInches, double speedLimit, double secArg, double ticksPerInchArg) {
+  public AutoMoveStraight(AutoController autoArg, BreakerDiffDrive driveTrainArg, BreakerPigeon2 imuArg, double distanceInches, double speedLimit, double secArg, double ticksPerInchArg) {
     time = secArg * 50; 
     auto = autoArg;
     imu = imuArg;
