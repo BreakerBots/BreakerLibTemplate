@@ -7,12 +7,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 
-public class ExampleSubsystem extends SubsystemBase {
+public class TestSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   private BreakerPigeon2 imu;
   int cycles;
 
-  public ExampleSubsystem() {
+  public TestSubsystem() {
     imu = new BreakerPigeon2(5, true);
     imu.resetGlobalPosition();
   }
