@@ -40,4 +40,8 @@ public class BreakerDiffDriveOdometry{
         double degPos = basePose.getRotation().getDegrees();
         return new double[]{xPos, yPos, degPos};
     }
+
+    public Pose2d getPoseMeters() {
+        return driveOdometer.getPoseMeters();
+    }
 }

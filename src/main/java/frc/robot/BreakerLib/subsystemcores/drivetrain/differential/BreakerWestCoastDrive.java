@@ -4,11 +4,16 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.differential;
 
+import java.io.ObjectInputFilter.Config;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
@@ -53,6 +58,12 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
     diffDrive.tankDrive(leftSpeed, rightSpeed);
   }
 
+  public void tankMoveVoltage(double leftVoltage, double rightVoltage) {
+    leftDrive.setVoltage(leftVoltage);
+    rightDrive.setVoltage(rightVoltage);
+    diffDrive.feed();
+  }
+
   public void resetDriveEncoders() {
     leftLead.setSelectedSensorPosition(0);
     rightLead.setSelectedSensorPosition(0);
@@ -91,5 +102,21 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
   /** Returns an instance of the drivetrain's right side lead motor */
   public WPI_TalonFX getRightLeadMotor() {
     return rightLead;
+  }
+
+  public SimpleMotorFeedforward getFeedforward() {
+    return new SimpleMotorFeedforward(driveConfig.getFeedForwardKs(), driveConfig.getFeedForwardKv(), driveConfig.getFeedForwardKa());
+  }
+
+  public DifferentialDriveKinematics getKinematics() {
+    return driveConfig.getKinematics();
+  }
+
+  public PIDController getLeftPIDController() {
+    return driveConfig.getLeftPID();
+  }
+
+  public PIDController getRightPIDController() {
+    return driveConfig.getRightPID();
   }
 }
