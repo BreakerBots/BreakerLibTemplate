@@ -9,11 +9,9 @@ import frc.robot.BreakerLib.util.BreakerUnits;
 
 /** Add your docs here. */
 public class BreakerRoboRio {
-    private double prevTime;
-    public BreakerRoboRio() {
-    }
+    private static double prevTime;
 
-    public double getInterCycleTime() {
+    public static double getInterCycleTime() {
         double curTime = RobotController.getFPGATime(); // In microseconds
         double diffTime = curTime - prevTime;
         prevTime = curTime;
@@ -21,11 +19,11 @@ public class BreakerRoboRio {
         return diffTime;
     }
 
-    public long getRobotTimeMS() {
+    public static long getRobotTimeMS() {
         return RobotController.getFPGATime();
     }
 
-    public double getRobotTimeSeconds() {
+    public static double getRobotTimeSeconds() {
         return RobotController.getFPGATime();
     }
 }
