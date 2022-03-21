@@ -6,5 +6,4 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain;
 
 /** Add your docs here. */
 public class BreakerGenericDrivetrain {
-    
 }

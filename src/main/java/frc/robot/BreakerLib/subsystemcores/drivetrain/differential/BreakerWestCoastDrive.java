@@ -41,6 +41,10 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
     diffDrive.arcadeDrive(netSpeed, turnSpeed);
   }
 
+  public void tankMove(double leftSpeed, double rightSpeed) {
+    diffDrive.tankDrive(leftSpeed, rightSpeed);
+  }
+
   public void resetDriveEncoders() {
     leftLead.setSelectedSensorPosition(0);
     rightLead.setSelectedSensorPosition(0);

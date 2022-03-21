@@ -33,12 +33,6 @@ public class BreakerPigeon2 extends SubsystemBase {
   public BreakerPigeon2(int deviceID, boolean isInverted) {
     pigeon = new WPI_Pigeon2(deviceID);
     imuInvert = isInverted ? -1 : 1;
-    // Replaced with ternary
-    // if (isInverted) {
-    // imuInvert = -1;
-    // } else {
-    // imuInvert = 1;
-    // }
   }
   @Override
   public void periodic() {
@@ -74,7 +68,6 @@ public class BreakerPigeon2 extends SubsystemBase {
     double diffTime = curTime - prevTime;
     prevTime = curTime;
     diffTime = BreakerUnits.microsecondsToSeconds(diffTime);
-    // diffTime *= 0.000001; // Converted into seconds
     return diffTime;
   }
   public double getPerCycle1gSpeed() {

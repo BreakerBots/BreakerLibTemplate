@@ -14,7 +14,7 @@ public class BreakerWestCoastDriveConfig {
     private double wheelDiameter;
     private double wheelCircumference;
     private double getTicksPerWheelRotation;
-    BreakerWestCoastDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter) {
+    public BreakerWestCoastDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter) {
         ticksPerInch = BreakerMath.getTicksPerInch(encoderTicks, gearRatioTo1, wheelDiameter);
         wheelDiameter = BreakerMath.getCircumferenceFromDiameter(wheelDiameter);
         getTicksPerWheelRotation = BreakerMath.getTicksPerRotation(encoderTicks, gearRatioTo1);
