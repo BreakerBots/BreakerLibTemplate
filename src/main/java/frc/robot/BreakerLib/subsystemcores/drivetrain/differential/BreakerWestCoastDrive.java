@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
+import frc.robot.BreakerLib.util.BreakerMotorControle;
 
 public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
@@ -72,20 +73,12 @@ public class BreakerWestCoastDrive extends BreakerGenericDrivetrain {
     return getRightDriveTicks() / driveConfig.getTicksPerInch();
   }
 
-  public void setMotorBreakMode(WPI_TalonFX motor, Boolean isEnabled) {
-    motor.setNeutralMode((isEnabled ? NeutralMode.Brake : NeutralMode.Coast));
-  }
-
-  public void setMotorBreakMode(WPI_TalonSRX motor, Boolean isEnabled) {
-    motor.setNeutralMode((isEnabled ? NeutralMode.Brake : NeutralMode.Coast));
-  }
-
   public void setDrivetrainBreakMode(boolean isEnabled) {
     for (WPI_TalonFX motorL: leftMotors) {
-      setMotorBreakMode(motorL, isEnabled);
+      BreakerMotorControle.setTalonBreakMode(motorL, isEnabled);
     }
     for (WPI_TalonFX motorR: rightMotors) {
-      setMotorBreakMode(motorR, isEnabled);
+      BreakerMotorControle.setTalonBreakMode(motorR, isEnabled);
     }
   }
 }
