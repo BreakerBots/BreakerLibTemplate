@@ -101,8 +101,6 @@ public class BreakerUnits {
         return ((centimeters * MILLIMETERS_PER_CENTIMETER) / MILLIMETERS_PER_CENTIMETER);
     }
 
-
-
     public enum ShortDistanceUnits {
         CENTIMETER,
         MILLIMETER,

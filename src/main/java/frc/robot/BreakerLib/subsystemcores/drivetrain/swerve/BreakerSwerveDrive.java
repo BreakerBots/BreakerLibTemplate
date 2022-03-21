@@ -4,6 +4,8 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
+import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
+
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   /** Creates a new BreakerSwerveDrive. */
   public BreakerSwerveDrive() {}

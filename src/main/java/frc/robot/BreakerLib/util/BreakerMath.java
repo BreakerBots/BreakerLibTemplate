@@ -1,5 +1,8 @@
 package frc.robot.BreakerLib.util;
 
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotController;
 
@@ -117,3 +120,5 @@ public class BreakerMath {
         return ((Double.valueOf(FixedPointVal)) / (Math.pow(2, bitsAfterDicimal)));
     }
 }
+
+

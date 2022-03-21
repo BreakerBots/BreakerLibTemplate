@@ -7,7 +7,7 @@ package frc.robot.BreakerLib.auto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.WestCoastDrive.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
 import frc.robot.BreakerLib.util.BreakerMath;
 
 /** Robot moves forward/back to target distance */
