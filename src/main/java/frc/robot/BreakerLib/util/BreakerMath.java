@@ -112,10 +112,22 @@ public class BreakerMath {
         return ((Double.valueOf(FixedPointVal)) / (Math.pow(2, bitsAfterDicimal)));
     }
 
+    /** Converts a fixed point notiation number into a double precision foating point number
+    * @param FixedPointVal fixed point number represented as a non-fractional long integer
+    * @param bitsAfterDicimal fixed point notation is generaly represented as Qx.y where x 
+    * represents the number of bits before the decimal, and y prepresents the number of bits 
+    * after the decimal (EX: Q2.14)
+    */
     public static double fixedToFloat(Long FixedPointVal, int bitsAfterDicimal) {
         return ((Double.valueOf(FixedPointVal)) / (Math.pow(2, bitsAfterDicimal)));
     }
 
+    /** Converts a fixed point notiation number into a double precision foating point number
+    * @param FixedPointVal fixed point number represented as a non-fractional short integer
+    * @param bitsAfterDicimal fixed point notation is generaly represented as Qx.y where x 
+    * represents the number of bits before the decimal, and y prepresents the number of bits 
+    * after the decimal (EX: Q2.14)
+    */
     public static double fixedToFloat(Short FixedPointVal, int bitsAfterDicimal) {
         return ((Double.valueOf(FixedPointVal)) / (Math.pow(2, bitsAfterDicimal)));
     }
