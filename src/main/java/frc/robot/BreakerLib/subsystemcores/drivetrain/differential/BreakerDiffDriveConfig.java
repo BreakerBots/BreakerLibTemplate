@@ -6,7 +6,6 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.differential;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 

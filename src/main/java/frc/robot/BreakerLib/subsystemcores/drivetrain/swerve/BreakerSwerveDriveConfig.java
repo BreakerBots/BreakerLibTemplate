@@ -17,17 +17,62 @@ public class BreakerSwerveDriveConfig {
     private double maxForwardVel;
     private double maxSidewaysVel;
     private double maxAngleVel;
+    private int moduleNum;
+    private double moduleAnglekP;
+    private double moduleAnglekI;
+    private double moduleAngleKd;
+    private double moduleVelkP;
+    private double moduleVelkI;
+    private double moduleVelKd;
 
     private SwerveDriveKinematics kinematics;
 
-    public BreakerSwerveDriveConfig(double maxFwdVel, double maxSidewaysVel, double maxAngVel, Translation2d... wheelPositionsRelativeToCenter) {
+    public BreakerSwerveDriveConfig(double maxFwdVel, double maxSidewaysVel, double maxAngVel, 
+    double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
+     double moduleVelkI, double moduleVelKd, Translation2d... wheelPositionsRelativeToCenter) {
+
         this.maxForwardVel = maxForwardVel;
         this.maxSidewaysVel = maxSidewaysVel;
         this.maxAngleVel = maxAngVel;
+        this.moduleAngleKd = moduleAngleKd;
+        this.moduleAnglekI = moduleAnglekI;
+        this.moduleAnglekP = moduleAnglekP;
+        this.moduleVelKd = moduleVelKd;
+        this.moduleVelkI = moduleVelkI;
+        this.moduleVelkP = moduleVelkP;
+        moduleNum = wheelPositionsRelativeToCenter.length;
         kinematics = new SwerveDriveKinematics(wheelPositionsRelativeToCenter);
     }
 
     public SwerveDriveKinematics getKinematics() {
         return kinematics;
+    }
+
+    public int getNumerOfModules() {
+        return moduleNum;
+    }
+    
+    public double getModuleVelkP() {
+        return moduleVelkP;
+    }
+
+    public double getModuleVelkI() {
+        return moduleVelkI;
+    }
+
+    public double getModuleVelKd() {
+        return moduleVelKd;
+    }
+
+    public double getModuleAnglekP() {
+        return moduleAnglekP;
+    }
+
+    public double getModuleAnglekI() {
+        return moduleAnglekI;
+    }
+
+    public double getModuleAngleKd() {
+        return moduleAngleKd;
     }
 }

@@ -8,14 +8,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerColorSensor;
-import frc.robot.BreakerLib.odometry.BreakerDiffDriveOdometry;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDriveConfig;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDriveConfig;
 
-public class ExampleDriveSubsystem extends SubsystemBase {
+
+public class ExampleDriveSubsystem<drivetrain> extends SubsystemBase {
   /** Creates a new ExampleDriveSubsystem. */
-  BreakerWestCoastDrive drivetrain;
-  BreakerWestCoastDriveConfig driveConfig;
+  BreakerDiffDrive drivetrain;
+  BreakerDiffDriveConfig driveConfig;
   WPI_TalonFX left1;
   WPI_TalonFX left2;
   WPI_TalonFX left3;
@@ -33,11 +33,11 @@ public class ExampleDriveSubsystem extends SubsystemBase {
     right2 = new WPI_TalonFX(0);
     right3 = new WPI_TalonFX(0);
 
-    leftMotors = BreakerWestCoastDrive.createMotorArray(left1, left2, left3);
-    rightMotors = BreakerWestCoastDrive.createMotorArray(right1, right2, right3);
+    leftMotors = BreakerDiffDrive.createMotorArray(left1, left2, left3);
+    rightMotors = BreakerDiffDrive.createMotorArray(right1, right2, right3);
     
-    driveConfig = new BreakerWestCoastDriveConfig(2048, 0, 0);
-    drivetrain = new BreakerWestCoastDrive(leftMotors, rightMotors, false, true, driveConfig);
+    driveConfig = new BreakerDiffDriveConfig(2048, 0, 0, 0, 0, 0, 0, null, null);
+    drivetrain = new BreakerDiffDrive(leftMotors, rightMotors, false, true, driveConfig);
   }
 
   @Override
