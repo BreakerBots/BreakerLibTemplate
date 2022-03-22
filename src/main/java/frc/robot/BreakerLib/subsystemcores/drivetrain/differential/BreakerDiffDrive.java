@@ -19,6 +19,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
+import frc.robot.BreakerLib.util.BreakerMotorControle;
+import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
@@ -51,7 +53,7 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
     rightMotors = this.rightMotors;
   }
 
-  public void move(double netSpeed, double turnSpeed) {
+  public void arcadeDrive(double netSpeed, double turnSpeed) {
     diffDrive.arcadeDrive(netSpeed, turnSpeed);
   }
 
@@ -130,6 +132,7 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(leftMetersPerSecond, rightMetersPerSecond);
+    return new DifferentialDriveWheelSpeeds( BreakerUnits.inchesToMeters((leftLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10),
+     BreakerUnits.inchesToMeters((rightLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10));
   }
 }

@@ -7,8 +7,17 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
+  BreakerSwerveDriveConfig config;
+  
+
   /** Creates a new BreakerSwerveDrive. */
-  public BreakerSwerveDrive() {}
+  public BreakerSwerveDrive(BreakerSwerveDriveConfig config) {
+    this.config = config;
+  }
+
+  public void drive(double strafeX, double strafeY, double rotation) {
+    
+  }
 
 
 

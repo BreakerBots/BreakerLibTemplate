@@ -7,7 +7,7 @@ package frc.robot.BreakerLib.auto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 import frc.robot.BreakerLib.util.BreakerMath;
 
 /** Robot moves forward/back to target distance */
@@ -57,7 +57,7 @@ public class AutoMoveStraight extends CommandBase {
     motorSpeed = MathUtil.clamp(motorSpeed, -speedClamp, speedClamp);
     motorSpeed += (motorSpeed > 0) ? auto.getMoveStraightFeedForward() : -auto.getMoveStraightFeedForward();
     double turnSpeed = imu.getYaw() * -0.04;
-    driveTrain.move(motorSpeed, turnSpeed);
+    driveTrain.arcadeDrive(motorSpeed, turnSpeed);
     // 1D movement back and forth
 
     System.out.println("Position error: " + auto.getMoveStraightError());
@@ -67,7 +67,7 @@ public class AutoMoveStraight extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     cyclecount = 0;
-    driveTrain.move(0, 0);
+    driveTrain.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.

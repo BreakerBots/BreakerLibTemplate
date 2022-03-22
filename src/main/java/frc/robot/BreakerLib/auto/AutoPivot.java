@@ -7,7 +7,7 @@ package frc.robot.BreakerLib.auto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerWestCoastDrive;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 
 public class AutoPivot extends CommandBase {
   AutoController auto;
@@ -49,7 +49,7 @@ public class AutoPivot extends CommandBase {
       turnPercent = MathUtil.clamp(turnPercent, -speedClamp, speedClamp); // Restricts motor speed
       turnPercent += (turnPercent > 0 ? auto.getPivotFeedForward() : -auto.getPivotFeedForward());
       System.out.println("CurrAng: " + curAngle + " TgtAng: " + target + " AngErr: " + auto.getPivotError() + " Turn %: " + turnPercent);
-      drivetrain.move(0, turnPercent); // Turns in place
+      drivetrain.arcadeDrive(0, turnPercent); // Turns in place
       
   }
 

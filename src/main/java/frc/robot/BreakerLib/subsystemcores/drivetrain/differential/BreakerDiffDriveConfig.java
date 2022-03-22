@@ -25,7 +25,7 @@ public class BreakerDiffDriveConfig {
     private double feedForwardKa;
     private PIDController leftPID;
     private PIDController rightPID;
-    public BreakerDiffDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter) { 
+    public BreakerDiffDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter, 
         double feedForwardKs, double feedForwardKv, double feedForwardKa, double robotTrackWidthInches, PIDController leftPID, PIDController rightPID) {
         
         kinematics = new DifferentialDriveKinematics(BreakerUnits.inchesToMeters(robotTrackWidthInches));
