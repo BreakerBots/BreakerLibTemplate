@@ -7,8 +7,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDrive;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDriveConfig;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDriveOdometry;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveModule;
 
 public class ExampleSwerveDriveSubsystem extends SubsystemBase {
@@ -31,19 +33,21 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
 
   BreakerSwerveDrive drivetrain;
 
-  public ExampleSwerveDriveSubsystem() {
+  BreakerSwerveDriveOdometry driveOdometry;
+
+  public ExampleSwerveDriveSubsystem(BreakerPigeon2 imu) {
     driveConfig = new BreakerSwerveDriveConfig(maxForwardVel, maxSidewaysVel, maxAngVel, moduleAnglekP, 
     moduleAnglekI, moduleAngleKd, moduleVelkP, moduleVelkI, moduleVelKd, turnMotorGearRatioToOne, 
     driveMotorGearRatioToOne, wheelDiameter, wheelPositionsRelativeToCenter);
 
-    driveLF = new WPI_TalonFX(deviceNumber);
-    turnLF = new WPI_TalonFX(deviceNumber);
-    driveRF = new WPI_TalonFX(deviceNumber);
-    turnRF = new WPI_TalonFX(deviceNumber);
-    driveLB = new WPI_TalonFX(deviceNumber);
-    turnLB = new WPI_TalonFX(deviceNumber);
-    driveRB = new WPI_TalonFX(deviceNumber);
-    turnRB = new WPI_TalonFX(deviceNumber);
+    driveLF = new WPI_TalonFX(0);
+    turnLF = new WPI_TalonFX(0);
+    driveRF = new WPI_TalonFX(0);
+    turnRF = new WPI_TalonFX(0);
+    driveLB = new WPI_TalonFX(0);
+    turnLB = new WPI_TalonFX(0);
+    driveRB = new WPI_TalonFX(0);
+    turnRB = new WPI_TalonFX(0);
 
     leftFrontModule = new BreakerSwerveModule(driveLF, turnLF, driveConfig);
     rightFrontModule = new BreakerSwerveModule(driveRF, turnRF, driveConfig);
@@ -51,6 +55,10 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
     rightBackModule = new BreakerSwerveModule(driveRB, turnRB, driveConfig);
 
     drivetrain = new BreakerSwerveDrive(driveConfig, leftFrontModule, rightFrontModule, leftBackModule, rightBackModule);
+
+    imu = new BreakerPigeon2(0, true);
+
+    driveOdometry = new BreakerSwerveDriveOdometry(driveConfig, imu, drivetrain);
   }
 
   @Override
