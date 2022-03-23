@@ -7,6 +7,7 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
@@ -14,7 +15,10 @@ import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   BreakerSwerveDriveConfig config;
+  // [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight
   SwerveModuleState[] targetModuleStates;
+  SwerveModuleState[] currentModuleStates;
+
   PIDController frontLeftAng;
   PIDController frontLeftVel;
   PIDController frontRightAng;
@@ -35,6 +39,13 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     backLeftVel = new PIDController(config.getModuleVelkP(), config.getModuleVelkI(), config.getModuleVelKd());
     backRightAng = new PIDController(config.getModuleAnglekP(), config.getModuleAnglekI(), config.getModuleAngleKd());
     backRightVel = new PIDController(config.getModuleVelkP(), config.getModuleVelkI(), config.getModuleVelKd()); 
+  }
+
+  public void updateCurrentModuleStates() {
+    currentModuleStates[0] = new SwerveModuleState(speedMetersPerSecond, angle);
+    currentModuleStates[1] = new SwerveModuleState(speedMetersPerSecond, angle);
+    currentModuleStates[2] = new SwerveModuleState(speedMetersPerSecond, angle);
+    currentModuleStates[3] = new SwerveModuleState(speedMetersPerSecond, angle);
   }
 
   public void move(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
