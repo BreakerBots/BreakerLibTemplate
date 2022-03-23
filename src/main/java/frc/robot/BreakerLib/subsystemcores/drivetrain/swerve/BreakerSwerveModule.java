@@ -30,8 +30,8 @@ public class BreakerSwerveModule {
     }
     
     public void setModuleTarget(Rotation2d tgtAngle, double speedMetersPreSec) {
-        anglePID.calculate(getModuleAngle(), tgtAngle.getDegrees());
-        drivePID.calculate(, speedMetersPreSec);
+        turnMotor.set(anglePID.calculate(getModuleAngle(), tgtAngle.getDegrees()));
+        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec));
     }
 
     public double getModuleAngle() {
@@ -43,6 +43,7 @@ public class BreakerSwerveModule {
     }
     
     public double getModuleVelMetersPerSec() {
-        BreakerMath.ticksToInches(driveMotor.getSelectedSensorVelocity() * 10, BreakerMath.getTicksPerInch(2048, config.getDriveMotorGearRatioToOne(), ))
+       return BreakerUnits.inchesToMeters(BreakerMath.ticksToInches(driveMotor.getSelectedSensorVelocity() * 10,
+        BreakerMath.getTicksPerInch(2048, config.getDriveMotorGearRatioToOne(), config.getWheelDiameter())));
     }
 }

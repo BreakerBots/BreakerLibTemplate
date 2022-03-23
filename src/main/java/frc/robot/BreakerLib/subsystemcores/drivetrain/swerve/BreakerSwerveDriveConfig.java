@@ -26,12 +26,14 @@ public class BreakerSwerveDriveConfig {
     private double moduleVelKd;
     private double turnMotorGearRatioToOne;
     private double driveMotorGearRatioToOne;
+    public double wheelDiameter;
 
     private SwerveDriveKinematics kinematics;
 
-    public BreakerSwerveDriveConfig(double maxFwdVel, double maxSidewaysVel, double maxAngVel, 
+    public BreakerSwerveDriveConfig(double maxForwardVel, double maxSidewaysVel, double maxAngVel, 
     double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
-     double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne, Translation2d... wheelPositionsRelativeToCenter) {
+     double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne,
+     double wheelDiameter, Translation2d... wheelPositionsRelativeToCenter) {
 
         this.maxForwardVel = maxForwardVel;
         this.maxSidewaysVel = maxSidewaysVel;
@@ -42,6 +44,7 @@ public class BreakerSwerveDriveConfig {
         this.moduleVelKd = moduleVelKd;
         this.moduleVelkI = moduleVelkI;
         this.moduleVelkP = moduleVelkP;
+        this.wheelDiameter = wheelDiameter;
         this.turnMotorGearRatioToOne = turnMotorGearRatioToOne;
         this.driveMotorGearRatioToOne = driveMotorGearRatioToOne;
         moduleNum = wheelPositionsRelativeToCenter.length;
@@ -98,5 +101,9 @@ public class BreakerSwerveDriveConfig {
 
     public double getDriveMotorGearRatioToOne() {
         return driveMotorGearRatioToOne;
+    }
+
+    public double getWheelDiameter() {
+        return wheelDiameter;
     }
 }
