@@ -9,7 +9,9 @@ import java.io.ObjectInputFilter.Config;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
@@ -45,5 +47,9 @@ public class BreakerSwerveModule {
     public double getModuleVelMetersPerSec() {
        return BreakerUnits.inchesToMeters(BreakerMath.ticksToInches(driveMotor.getSelectedSensorVelocity() * 10,
         BreakerMath.getTicksPerInch(2048, config.getDriveMotorGearRatioToOne(), config.getWheelDiameter())));
+    }
+
+    public SwerveModuleState getModuleState() {
+        return new SwerveModuleState(getModuleVelMetersPerSec(), Rotation2d.fromDegrees(getModuleAngle()));
     }
 }

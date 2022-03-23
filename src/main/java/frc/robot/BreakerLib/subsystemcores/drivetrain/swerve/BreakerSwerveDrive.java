@@ -14,14 +14,15 @@ import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
-  BreakerSwerveDriveConfig config;
+  private BreakerSwerveDriveConfig config;
   // [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight
-  SwerveModuleState[] targetModuleStates;
+  private SwerveModuleState[] targetModuleStates;
+  SwerveModuleState[] currentModuleStates;
 
-  BreakerSwerveModule frontLeftModule;
-  BreakerSwerveModule frontRightModule;
-  BreakerSwerveModule backLeftModule;
-  BreakerSwerveModule backRightModule;
+  private BreakerSwerveModule frontLeftModule;
+  private BreakerSwerveModule frontRightModule;
+  private BreakerSwerveModule backLeftModule;
+  private BreakerSwerveModule backRightModule;
   /** Creates a new BreakerSwerveDrive. */
   public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerSwerveModule frontLeftModule, BreakerSwerveModule frontRightModule, BreakerSwerveModule backLeftModule, BreakerSwerveModule backRightModule) {
     this.config = config;
@@ -38,6 +39,18 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     frontRightModule.setModuleTarget(targetModuleStates[1].angle, targetModuleStates[1].speedMetersPerSecond);
     backLeftModule.setModuleTarget(targetModuleStates[2].angle, targetModuleStates[2].speedMetersPerSecond);
     backRightModule.setModuleTarget(targetModuleStates[3].angle, targetModuleStates[3].speedMetersPerSecond);
+  }
+
+  public void moveWithPrecentImput(double forwardPercent, double horizontalPercent, double turnPercent) {
+    move((forwardPercent * config.getMaxForwardVel()), (horizontalPercent * config.getMaxSidewaysVel()), (turnPercent * config.getMaxAngleVel()));
+  }
+
+  public SwerveModuleState[] getSwerveModuleStates() {
+    currentModuleStates[0] = frontLeftModule.getModuleState();
+    currentModuleStates[1] = frontRightModule.getModuleState();
+    currentModuleStates[2] = backLeftModule.getModuleState();
+    currentModuleStates[3] = backRightModule.getModuleState();
+    return currentModuleStates;
   }
 
 
