@@ -4,11 +4,13 @@
 
 package frc.robot.BreakerLib.auto.trajectoryauto.swerveauto;
 
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /** Add your docs here. */
 public class BreakerSwerveTrajectoryAuto {
     SwerveControllerCommand controller;
     BreakerSwerveTrajectoryAuto() {
+       
     }
 }

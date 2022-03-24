@@ -36,6 +36,11 @@ public class BreakerSwerveModule {
         driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec));
     }
 
+    public void setModuleTarget(SwerveModuleState targetState) {
+        turnMotor.set(anglePID.calculate(getModuleAngle(), targetState.angle.getDegrees()));
+        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), targetState.speedMetersPerSecond));
+    }
+
     public double getModuleAngle() {
         return (getTurnMotorTicks() / BreakerMath.getTicksPerRotation(2048, config.getTurnMotorGearRatioToOne()) * 360);
     }
@@ -51,5 +56,17 @@ public class BreakerSwerveModule {
 
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(getModuleVelMetersPerSec(), Rotation2d.fromDegrees(getModuleAngle()));
+    }
+
+    public boolean atAngleSetpoint() {
+        return anglePID.atSetpoint();
+    }
+
+    public boolean atVelSetpoint() {
+        return drivePID.atSetpoint();
+    }
+
+    public boolean atSetModuleState() {
+        return (atAngleSetpoint() && atVelSetpoint());
     }
 }

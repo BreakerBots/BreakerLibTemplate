@@ -1,6 +1,5 @@
 package frc.robot.BreakerLib.util;
 
-import edu.wpi.first.math.util.Units;
 
 public class BreakerUnits {
     public static final double MICROSECONDS_PER_SECOND = 1000000;
