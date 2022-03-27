@@ -13,7 +13,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerDiffDrive extends BreakerGenericDrivetrain {
@@ -88,7 +87,7 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
 
   public void setDrivetrainBrakeMode(boolean isEnabled) {
     for (WPI_TalonFX motorL: leftMotors) {
-      BreakerMotorControl.setTalonBrakeMode(motorL, isEnabled);
+      BreakerMotorControle.setTalonBrakeMode(motorL, isEnabled);
     }
     for (WPI_TalonFX motorR: rightMotors) {
       BreakerMotorControl.setTalonBrakeMode(motorR, isEnabled);

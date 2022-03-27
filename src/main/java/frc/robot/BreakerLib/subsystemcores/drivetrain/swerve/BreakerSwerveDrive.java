@@ -30,7 +30,8 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     this.backRightModule = backRightModule;
   }
 
-  /** Standard drivetrain movement command, specifyes robot speed in each axis including robot rotation (radian per second). */
+  /** Standard drivetrain movement command, specifyes robot speed in each axis including robot rotation (radian per second). 
+   * All values are relative to the robot's orientation. */
   public void move(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
     ChassisSpeeds speeds = new ChassisSpeeds(forwardVelMetersPerSec, horizontalVelMetersPerSec, radPerSec);
     targetModuleStates = config.getKinematics().toSwerveModuleStates(speeds);

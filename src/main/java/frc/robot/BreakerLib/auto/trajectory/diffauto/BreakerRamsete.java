@@ -18,13 +18,13 @@ import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDr
 
 /** Add your docs here. */
 public class BreakerRamsete {
-    RamseteCommand ramsete;
-    RamseteController ramseteController;
-    BreakerDiffDrive drivetrain;
-    DifferentialDriveWheelSpeeds wheelSpeeds;
-    TrajectoryConfig config;
-    DifferentialDriveVoltageConstraint voltageConstraints;
-    BreakerDiffDriveOdometry odometry;
+    private RamseteCommand ramsete;
+    private RamseteController ramseteController;
+    private BreakerDiffDrive drivetrain;
+    private DifferentialDriveWheelSpeeds wheelSpeeds;
+    private TrajectoryConfig config;
+    private DifferentialDriveVoltageConstraint voltageConstraints;
+    private BreakerDiffDriveOdometry odometry;
     public BreakerRamsete(Trajectory trajectoryToFollow, BreakerDiffDrive drivetrain, BreakerDiffDriveOdometry odometry, 
     Subsystem subsystemRequirements, double ramseteB, double ramseteZeta, double maxVel, double maxAccel, double maxVoltage){
         drivetrain = this.drivetrain;

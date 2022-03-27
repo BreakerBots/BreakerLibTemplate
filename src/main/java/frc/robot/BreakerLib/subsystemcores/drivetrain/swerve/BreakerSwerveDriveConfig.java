@@ -29,11 +29,11 @@ public class BreakerSwerveDriveConfig {
     public double wheelDiameter;
 
     private SwerveDriveKinematics kinematics;
-
+    /** The overall configuration for a Breaker Swerve Drive, must be passed in. */
     public BreakerSwerveDriveConfig(double maxForwardVel, double maxSidewaysVel, double maxAngVel, 
-    double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
-     double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne,
-     double wheelDiameter, Translation2d... wheelPositionsRelativeToCenter) {
+        double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
+        double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne,
+        double wheelDiameter, Translation2d... wheelPositionsRelativeToCenter) {
 
         this.maxForwardVel = maxForwardVel;
         this.maxSidewaysVel = maxSidewaysVel;
@@ -47,6 +47,7 @@ public class BreakerSwerveDriveConfig {
         this.wheelDiameter = wheelDiameter;
         this.turnMotorGearRatioToOne = turnMotorGearRatioToOne;
         this.driveMotorGearRatioToOne = driveMotorGearRatioToOne;
+
         moduleNum = wheelPositionsRelativeToCenter.length;
         kinematics = new SwerveDriveKinematics(wheelPositionsRelativeToCenter);
     }

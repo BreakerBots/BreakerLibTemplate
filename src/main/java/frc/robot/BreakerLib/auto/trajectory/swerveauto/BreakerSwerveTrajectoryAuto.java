@@ -11,6 +11,6 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 public class BreakerSwerveTrajectoryAuto {
     SwerveControllerCommand controller;
     BreakerSwerveTrajectoryAuto() {
-       
+        
     }
 }
