@@ -11,9 +11,9 @@ import frc.robot.BreakerLib.util.BreakerUnits;
 
 /** Add your docs here. */
 public class BreakerDiffDriveConfig {
-    DifferentialDriveKinematics kinematics;
+    private DifferentialDriveKinematics kinematics;
     private double robotTrackWidthInches;
-    private double encoderTicks;
+    private double ticksPerRotation;
     private double ticksPerInch;
     private double gearRatioTo1;
     private double wheelDiameter;
@@ -22,18 +22,20 @@ public class BreakerDiffDriveConfig {
     private double feedForwardKs;
     private double feedForwardKv;
     private double feedForwardKa;
-    private PIDController leftPID;
+    // WHY TWO SEPARATE PIDControllers?!
+    private PIDController leftPID; 
     private PIDController rightPID;
-    public BreakerDiffDriveConfig(double encoderTicks, double gearRatioTo1, double wheelDiameter, 
+
+    public BreakerDiffDriveConfig(double ticksPerRotation, double gearRatioTo1, double wheelDiameter, 
         double feedForwardKs, double feedForwardKv, double feedForwardKa, double robotTrackWidthInches, PIDController leftPID, PIDController rightPID) {
         
         kinematics = new DifferentialDriveKinematics(BreakerUnits.inchesToMeters(robotTrackWidthInches));
     
-        ticksPerInch = BreakerMath.getTicksPerInch(encoderTicks, gearRatioTo1, wheelDiameter);
+        ticksPerInch = BreakerMath.getTicksPerInch(ticksPerRotation, gearRatioTo1, wheelDiameter);
         wheelDiameter = BreakerMath.getCircumferenceFromDiameter(wheelDiameter);
-        getTicksPerWheelRotation = BreakerMath.getTicksPerRotation(encoderTicks, gearRatioTo1);
+        getTicksPerWheelRotation = BreakerMath.getTicksPerRotation(ticksPerRotation, gearRatioTo1);
 
-        encoderTicks = this.encoderTicks;
+        ticksPerRotation = this.ticksPerRotation;
         gearRatioTo1 = this.gearRatioTo1;
         feedForwardKs = this.feedForwardKs;
         feedForwardKv = this.feedForwardKv;
@@ -48,7 +50,7 @@ public class BreakerDiffDriveConfig {
     }
 
     public double getEncoderTicks() {
-        return encoderTicks;
+        return ticksPerRotation;
     }
 
     public double getGearRatioTo1() {

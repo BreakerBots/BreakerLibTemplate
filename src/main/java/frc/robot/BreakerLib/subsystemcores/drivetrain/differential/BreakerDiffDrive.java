@@ -13,7 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.BreakerMotorControle;
+import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerDiffDrive extends BreakerGenericDrivetrain {
@@ -25,10 +25,6 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX[] rightMotors;
   private DifferentialDrive diffDrive;
   private BreakerDiffDriveConfig driveConfig;
-
-  public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
-    return controllers;
-  }
   
   /** Creates a new West Coast Drive. */
   public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerDiffDriveConfig driveConfig) {
@@ -51,7 +47,7 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
     diffDrive.arcadeDrive(netSpeed, turnSpeed);
   }
 
-  public void tankMove(double leftSpeed, double rightSpeed) {
+  public void tankDrive(double leftSpeed, double rightSpeed) {
     diffDrive.tankDrive(leftSpeed, rightSpeed);
   }
 
@@ -86,12 +82,16 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
     return getRightDriveTicks() / driveConfig.getTicksPerInch();
   }
 
-  public void setDrivetrainBreakMode(boolean isEnabled) {
+  public double getRightDriveMeters() {
+    return Units.inchesToMeters(getRightDriveInches());
+  }
+
+  public void setDrivetrainBrakeMode(boolean isEnabled) {
     for (WPI_TalonFX motorL: leftMotors) {
-      BreakerMotorControle.setTalonBreakMode(motorL, isEnabled);
+      BreakerMotorControl.setTalonBrakeMode(motorL, isEnabled);
     }
     for (WPI_TalonFX motorR: rightMotors) {
-      BreakerMotorControle.setTalonBreakMode(motorR, isEnabled);
+      BreakerMotorControl.setTalonBrakeMode(motorR, isEnabled);
     }
   }
   
@@ -119,10 +119,6 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
 
   public PIDController getRightPIDController() {
     return driveConfig.getRightPID();
-  }
-
-  public double getRightDriveMeters() {
-    return Units.inchesToMeters(getRightDriveInches());
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {

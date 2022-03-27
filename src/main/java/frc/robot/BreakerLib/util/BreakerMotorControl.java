@@ -5,17 +5,18 @@
 package frc.robot.BreakerLib.util;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /** Add your docs here. */
-public class BreakerMotorControle {
+public class BreakerMotorControl {
     
-    public static void setTalonBreakMode(WPI_TalonFX motor, Boolean isEnabled) {
+    public static void setTalonBrakeMode(BaseMotorController motor, Boolean isEnabled) {
         motor.setNeutralMode((isEnabled ? NeutralMode.Brake : NeutralMode.Coast));
     }
 
-    public static void setTalonBreakMode(WPI_TalonSRX motor, Boolean isEnabled) {
-        motor.setNeutralMode((isEnabled ? NeutralMode.Brake : NeutralMode.Coast));
-    }
+    public static WPI_TalonFX[] createMotorArray(WPI_TalonFX... controllers){
+        return controllers;
+      }
 }
