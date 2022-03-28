@@ -149,4 +149,10 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void getOdometryPoseMeters() {
+    // TODO Auto-generated method stub
+    
+  }
 }
