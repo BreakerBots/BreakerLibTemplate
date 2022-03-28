@@ -10,7 +10,7 @@ import frc.robot.BreakerLib.devices.BreakerPigeon2;
 public class BreakerTeleopSwerveDriveControle extends CommandBase {
   /** Creates a new BreakerTeleopSwerveDriveControle. */
   private BreakerPigeon2 pigeon2;
-  public BreakerTeleopSwerveDriveControle(BreakerPigeon2 pigeon2, ) {
+  public BreakerTeleopSwerveDriveControle(BreakerPigeon2 pigeon2, BreakerSwerveDrive drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.pigeon2 = pigeon2;
   }

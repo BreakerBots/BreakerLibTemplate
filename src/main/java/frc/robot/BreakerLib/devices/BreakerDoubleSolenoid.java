@@ -15,10 +15,12 @@ public class BreakerDoubleSolenoid {
 
     public BreakerDoubleSolenoid(PneumaticsModuleType moduleType, int fwdChannel, int revChannel) {
         solenoid = new DoubleSolenoid(moduleType, fwdChannel, revChannel);
+        toDefaultState();
     }
 
-    public BreakerDoubleSolenoid(PneumaticsModuleType moduleType, int fwdChannel, int revChannel, int canID) {
-        solenoid = new DoubleSolenoid(canID, moduleType, fwdChannel, revChannel);
+    public BreakerDoubleSolenoid(PneumaticsModuleType moduleType, int fwdChannel, int revChannel, int pcmID) {
+        solenoid = new DoubleSolenoid(pcmID, moduleType, fwdChannel, revChannel);
+        toDefaultState();
     }
 
     public void setDefaultState(Value value) {
