@@ -4,12 +4,8 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
-import java.io.ObjectInputFilter.Config;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.BreakerLib.util.BreakerMath;

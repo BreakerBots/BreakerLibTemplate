@@ -53,5 +53,29 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     return currentModuleStates;
   }
 
+  @Override
+  public void setOdometry() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void getOdometer() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void updateOdometry() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void getOdometryPosition() {
+    // TODO Auto-generated method stub
+    
+  }
+
 
 }

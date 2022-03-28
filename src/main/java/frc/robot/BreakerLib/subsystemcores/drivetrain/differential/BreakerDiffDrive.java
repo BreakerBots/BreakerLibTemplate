@@ -125,4 +125,28 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
     return new DifferentialDriveWheelSpeeds( BreakerUnits.inchesToMeters((leftLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10),
      BreakerUnits.inchesToMeters((rightLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10));
   }
+
+  @Override
+  public void setOdometry() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void getOdometer() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void updateOdometry() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void getOdometryPosition() {
+    // TODO Auto-generated method stub
+    
+  }
 }

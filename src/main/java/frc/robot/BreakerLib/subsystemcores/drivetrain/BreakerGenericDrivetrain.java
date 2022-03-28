@@ -4,6 +4,16 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain;
 
-/** Add your docs here. */
-public class BreakerGenericDrivetrain {
+/** Contianer class for methods common to all drivetrain types */
+public abstract class BreakerGenericDrivetrain {
+    
+    public abstract void setOdometry();
+
+    public abstract void getOdometer();
+
+    public abstract void updateOdometry();
+
+    public abstract void getOdometryPosition();
+
+    public abstract void getOdometryPoseMeters();
 }
