@@ -14,17 +14,17 @@ public class TestSubsystem extends SubsystemBase {
 
   public TestSubsystem() {
     imu = new BreakerPigeon2(5, true);
-    imu.resetGlobalPosition();
+   // imu.resetGlobalPosition();
   }
 
   @Override
   public void periodic() {
     cycles ++;
-    // This method will be called once per scheduler run
-    String outString = String.format( " Y: %.3f ACCEL Y: %.3f RAW ACCEL Y: %.10s \n",
-         imu.getGlobalPositionComponents(2), imu.getIns2AccelY(), imu.getRawAccelerometerVals(1));
-    System.out.println(outString + " Bias Y: " + imu.getAccelYBias());
-  //  if (cycles % 300 == 0) {
+  //   // This method will be called once per scheduler run
+  //   String outString = String.format( " Y: %.3f ACCEL Y: %.3f RAW ACCEL Y: %.10s \n",
+  //        imu.getGlobalPositionComponents(2), imu.getIns2AccelY(), imu.getRawAccelerometerVals(1));
+  //   System.out.println(outString + " Bias Y: " + imu.getAccelYBias());
+  // //  if (cycles % 300 == 0) {
   //    imu.reset();
   //    imu.resetGlobalPosition();
   //  }

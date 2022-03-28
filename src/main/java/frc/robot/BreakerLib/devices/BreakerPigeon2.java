@@ -42,9 +42,9 @@ public class BreakerPigeon2 extends SubsystemBase {
     roll = BreakerMath.angleModulus(pigeon.getRoll());
     setName("IMU");
     addChild("Pigeon", pigeon);
-    calculateAccelerometerBias();
-    calculateGlobalPosition();
-    calculateYPositionMike();
+  //   calculateAccelerometerBias();
+  //   calculateGlobalPosition();
+  //   calculateYPositionMike();
   }
   /** Returns pitch angle within +- 360 degrees */
   public double getPitch() {
@@ -99,47 +99,47 @@ public class BreakerPigeon2 extends SubsystemBase {
   public double getRollRate() {
     return getGyroRates(2);
   }
-  public void calculateAccelerometerBias() {
-    double[] grav = new double[3];
-      // yAccelAccum += getRawIns2AccelY();
-      // xAccelAccum += getRawIns2AccelX();
-      pigeon.getGravityVector(grav);
-      YAccelBias = (getPerCycle1gSpeed() * grav[1]);
-      XAccelBias = (getPerCycle1gSpeed() * grav[0]);
-      // YAccelBias = yAccelAccum/cycleCount;
-      // XAccelBias = xAccelAccum/cycleCount;
-      // cycleCount ++;
-// Mike's test of linear accelerometer functionality  }
-  private double yAccelBiasMike() {
-    if (cycleCount < 150) {
-      yAccelAccum += getRawAccelerometerVals(1);
-      yAccelBiasMike = yAccelAccum / cycleCount;
-    }
-    yVelocityMike += actualYAccel * cycleTime;
-  }
-  private double calculateYPositionMike() {
-    double curTime = RobotController.getFPGATime(); // In microseconds
-    double cycleTime = curTime - prevTime;
-    double accelBias = yAccelBiasMike();
-    double unbasiasedAccel = getRawAccelerometerVals(1) - yAccelBiasMike;
-    yVelocityMike += unbiasedAccel * cycleTime;
-    yPostionMike += yVelocityMike * cycleTime;
-    prevTime = curTime;   System.out.println("Y accel: " + getRawAccelerometerVals(1) + "  Y accel bias: " + accelBias + "  Y vel: " + yVelocityMike + "  Y pos: " + yPositionMike);
-}
-  public int getAccelXBias() {
-    // if (cycleCount > 150) {
-    return XAccelBias;
-    // } else {
-    // return 0d;
-    // }
-  }
-  public int getAccelYBias() {
-    // if (cycleCount > 250) {
-    return YAccelBias;
-    // } else {
-    // return 0d;
-    // }
-  }
+//   public void calculateAccelerometerBias() {
+//     double[] grav = new double[3];
+//       // yAccelAccum += getRawIns2AccelY();
+//       // xAccelAccum += getRawIns2AccelX();
+//       pigeon.getGravityVector(grav);
+//       YAccelBias = (getPerCycle1gSpeed() * grav[1]);
+//       XAccelBias = (getPerCycle1gSpeed() * grav[0]);
+//       // YAccelBias = yAccelAccum/cycleCount;
+//       // XAccelBias = xAccelAccum/cycleCount;
+//       // cycleCount ++;
+// // Mike's test of linear accelerometer functionality  }
+  // private double yAccelBiasMike() {
+  //   if (cycleCount < 150) {
+  //     yAccelAccum += getRawAccelerometerVals(1);
+  //     yAccelBiasMike = yAccelAccum / cycleCount;
+  //   }
+  //   yVelocityMike += actualYAccel * cycleTime;
+  // }
+//   private double calculateYPositionMike() {
+//     double curTime = RobotController.getFPGATime(); // In microseconds
+//     double cycleTime = curTime - prevTime;
+//     double accelBias = yAccelBiasMike();
+//     double unbasiasedAccel = getRawAccelerometerVals(1) - yAccelBiasMike;
+//     yVelocityMike += unbiasedAccel * cycleTime;
+//     yPostionMike += yVelocityMike * cycleTime;
+//     prevTime = curTime;   System.out.println("Y accel: " + getRawAccelerometerVals(1) + "  Y accel bias: " + accelBias + "  Y vel: " + yVelocityMike + "  Y pos: " + yPositionMike);
+// }
+  // public int getAccelXBias() {
+  //   // if (cycleCount > 150) {
+  //   return XAccelBias;
+  //   // } else {
+  //   // return 0d;
+  //   // }
+  // }
+  // public int getAccelYBias() {
+  //   // if (cycleCount > 250) {
+  //   return YAccelBias;
+  //   // } else {
+  //   // return 0d;
+  //   // }
+  // }
   public short getRawAccelerometerVals(int arrayElement) {
     short[] accelVals = new short[3];
     pigeon.getBiasedAccelerometer(accelVals);
@@ -148,44 +148,44 @@ public class BreakerPigeon2 extends SubsystemBase {
   public double getRawIns2AccelX() {
     return (BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * getPerCycle1gSpeed());
   }
-  public double getIns2AccelX() {
-    return getRawIns2AccelX() - getAccelXBias();
-  }
+  // public double getIns2AccelX() {
+  //   return getRawIns2AccelX() - getAccelXBias();
+  // }
   public double getRawIns2AccelY() {
-    return (BreakerMath.fixedToFloat((getRawAccelerometerVals(1), 14) * getPerCycle1gSpeed());
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * getPerCycle1gSpeed());
   }
-  public double getIns2AccelY() {
-    return getRawIns2AccelY() - getAccelYBias();
-  }
+  // public double getIns2AccelY() {
+  //   return getRawIns2AccelY() - getAccelYBias();
+  // }
   public double getRawIns2AccelZ() {
     return (BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * getPerCycle1gSpeed());
   }
-  private void calculateGlobalPosition() {
-    // double diffTime = 0.02;
-    double radYaw = (yaw * (Math.PI / 180.0));
-    // xSpeed += getIns2AccelX();
-    ySpeed += getRawIns2AccelY();
-    // zSpeed += getIns2AccelZ();
-    wxy[0] = yaw;
-    wxy[1] += ((ySpeed * Math.cos(radYaw)) * getCycleDiffTime());
-    wxy[2] += ((ySpeed * Math.sin(radYaw)) * getCycleDiffTime());
-    // if (cycleCount == 250) {
-    // resetGlobalPosition();
-    // }
-  }
-  public double[] getGlobalPosition() {
-    return wxy;
-  }
-  public double getGlobalPositionComponents(int arrayElement) {
-    return wxy[arrayElement];
-  }
-  public void resetGlobalPosition() {
-    wxy[1] = 0;
-    wxy[2] = 0;
-    ySpeed = 0;
-    xSpeed = 0;
-    zSpeed = 0;
-  }
+  // private void calculateGlobalPosition() {
+  //   // double diffTime = 0.02;
+  //   double radYaw = (yaw * (Math.PI / 180.0));
+  //   // xSpeed += getIns2AccelX();
+  //   ySpeed += getRawIns2AccelY();
+  //   // zSpeed += getIns2AccelZ();
+  //   wxy[0] = yaw;
+  //   wxy[1] += ((ySpeed * Math.cos(radYaw)) * getCycleDiffTime());
+  //   wxy[2] += ((ySpeed * Math.sin(radYaw)) * getCycleDiffTime());
+  //   // if (cycleCount == 250) {
+  //   // resetGlobalPosition();
+  //   // }
+  // }
+  // public double[] getGlobalPosition() {
+  //   return wxy;
+  // }
+  // public double getGlobalPositionComponents(int arrayElement) {
+  //   return wxy[arrayElement];
+  // }
+  // public void resetGlobalPosition() {
+  //   wxy[1] = 0;
+  //   wxy[2] = 0;
+  //   ySpeed = 0;
+  //   xSpeed = 0;
+  //   zSpeed = 0;
+  // }
   public int getPigeonUpTime() {
     return pigeon.getUpTime();
   }
