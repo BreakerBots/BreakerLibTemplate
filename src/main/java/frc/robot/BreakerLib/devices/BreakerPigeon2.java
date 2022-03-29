@@ -7,8 +7,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 /* Good version of the CTRE Pigeon 2 class BAYBEEE! */
-public class BreakerPigeon2 extends SubsystemBase {
+public class BreakerPigeon2 extends BreakerGenaricDevice {
   private WPI_Pigeon2 pigeon;
   private double imuInvert;
   private double pitch;
@@ -34,29 +35,17 @@ public class BreakerPigeon2 extends SubsystemBase {
     pigeon = new WPI_Pigeon2(deviceID);
     imuInvert = isInverted ? -1 : 1;
   }
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    pitch = BreakerMath.angleModulus(pigeon.getPitch());
-    yaw = BreakerMath.angleModulus(pigeon.getYaw()) * imuInvert;
-    roll = BreakerMath.angleModulus(pigeon.getRoll());
-    setName("IMU");
-    addChild("Pigeon", pigeon);
-  //   calculateAccelerometerBias();
-  //   calculateGlobalPosition();
-  //   calculateYPositionMike();
-  }
   /** Returns pitch angle within +- 360 degrees */
   public double getPitch() {
-    return pitch;
+    return BreakerMath.angleModulus(pigeon.getPitch());
   }
   /** Returns yaw angle within +- 360 degrees */
   public double getYaw() {
-    return yaw;
+    return BreakerMath.angleModulus(pigeon.getYaw()) * imuInvert;
   }
   /** Returns roll angle within +- 360 degrees */
   public double getRoll() {
-    return roll;
+    return BreakerMath.angleModulus(pigeon.getRoll());
   }
   /**
    * Gets the amount of time in seconds between cycles.
@@ -188,6 +177,25 @@ public class BreakerPigeon2 extends SubsystemBase {
   // }
   public int getPigeonUpTime() {
     return pigeon.getUpTime();
+  }
+  @Override
+  public void runSelfTest() {
+    // TODO Auto-generated method stub
+  }
+  @Override
+  public DeviceHealth getHealth() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  @Override
+  public String getFaults() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  @Override
+  public String getDeviceName() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
 

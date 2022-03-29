@@ -27,7 +27,7 @@ public class SelfTest extends SubsystemBase {
       StringBuilder work = new StringBuilder(" SELF CHECK: ");
       List<BreakerGenaricDevice> faultDevices = new ArrayList<BreakerGenaricDevice>();
       for (BreakerGenaricDevice device: devices) {
-        work.append(" " + device.getDeviceName() + "-" + device.runSelfTest() + " ");
+        device.runSelfTest();
         if (device.getHealth() != DeviceHealth.NOMINAL) {
           faultDevices.add(device);
         }

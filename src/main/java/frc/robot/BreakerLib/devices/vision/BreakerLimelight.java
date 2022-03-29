@@ -6,12 +6,16 @@ package frc.robot.BreakerLib.devices.vision;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerLimelight extends SubsystemBase {
+public class BreakerLimelight extends BreakerGenaricDevice {
   private double mountingAngle;
   private double mountingHeight;
   private String limelightName;
   private LimelightTarget currentTarget;
+  private DeviceHealth currentHealth;
+  private String faults = "none";
   /** Creates an new vision prossesing limelight
    * @param limelightName the network name of the limelight you are initializing
    */
@@ -104,7 +108,28 @@ public class BreakerLimelight extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void runSelfTest() {
+    if (getAllVisionData()[5] == 0) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults = "limelightDisconnected";
+    } else {
+      currentHealth = DeviceHealth.NOMINAL;
+      faults = "none";
+    }
+  }
+
+  @Override
+  public DeviceHealth getHealth() {
+    return currentHealth;
+  }
+
+  @Override
+  public String getFaults() {
+    return faults;
+  }
+
+  @Override
+  public String getDeviceName() {
+    return limelightName;
   }
 }
