@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDriveOdometry;
 
 /** Add your docs here. */
 public class BreakerRamsete {
@@ -24,17 +23,15 @@ public class BreakerRamsete {
     private DifferentialDriveWheelSpeeds wheelSpeeds;
     private TrajectoryConfig config;
     private DifferentialDriveVoltageConstraint voltageConstraints;
-    private BreakerDiffDriveOdometry odometry;
-    public BreakerRamsete(Trajectory trajectoryToFollow, BreakerDiffDrive drivetrain, BreakerDiffDriveOdometry odometry, 
+    public BreakerRamsete(Trajectory trajectoryToFollow, BreakerDiffDrive drivetrain, 
     Subsystem subsystemRequirements, double ramseteB, double ramseteZeta, double maxVel, double maxAccel, double maxVoltage){
         drivetrain = this.drivetrain;
-        odometry = this.odometry;
         voltageConstraints = new DifferentialDriveVoltageConstraint(drivetrain.getFeedforward(), drivetrain.getKinematics(), maxVoltage);
         config = new TrajectoryConfig(maxVel, maxAccel);
             config.setKinematics(drivetrain.getKinematics());
             config.addConstraint(voltageConstraints);
         ramseteController = new RamseteController(ramseteB, ramseteZeta);
-        ramsete = new RamseteCommand(trajectoryToFollow, odometry :: getPoseMeters, ramseteController, drivetrain.getFeedforward(), 
+        ramsete = new RamseteCommand(trajectoryToFollow, drivetrain :: getOdometryPoseMeters, ramseteController, drivetrain.getFeedforward(), 
         drivetrain.getKinematics(), drivetrain :: getWheelSpeeds, drivetrain.getLeftPIDController(), drivetrain.getRightPIDController(), drivetrain :: tankMoveVoltage, subsystemRequirements);
     }
 }

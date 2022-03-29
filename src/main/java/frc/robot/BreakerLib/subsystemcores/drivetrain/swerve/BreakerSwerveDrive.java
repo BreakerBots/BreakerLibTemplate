@@ -7,14 +7,17 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
+import frc.robot.BreakerLib.util.BreakerUnits;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   private BreakerSwerveDriveConfig config;
@@ -28,11 +31,14 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   private BreakerSwerveModule backRightModule;
 
   private BreakerPigeon2 pigeon2;
+
+  private SwerveDriveOdometry odometer;
   /** Constructs a new swerve based drivetrain
    * @param config - the confiuration values for the drivetrain's charicotristics and behavor, passed in as a "BreakerSwerveDriveConfig" object
    * @param swerveModules - The four swerve drive modules that make up the drivetrain, must be passed in the same order shown below
    */
   public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerPigeon2 pigeon2, BreakerSwerveModule frontLeftModule, BreakerSwerveModule frontRightModule, BreakerSwerveModule backLeftModule, BreakerSwerveModule backRightModule) {
+    odometer = new SwerveDriveOdometry(config.getKinematics(), Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]));
     this.config = config;
     this.frontLeftModule = frontRightModule;
     this.frontRightModule = frontRightModule;
@@ -80,32 +86,32 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
 
   @Override
   public void setOdometry(Pose2d poseMeters, double gyroAngle) {
-    // TODO Auto-generated method stub
+    odometer.resetPosition(poseMeters, Rotation2d.fromDegrees(gyroAngle));
     
   }
 
   @Override
   public Object getOdometer() {
-    // TODO Auto-generated method stub
-    return null;
+    return odometer;
   }
 
   @Override
   public void updateOdometry() {
-    // TODO Auto-generated method stub
-    
+    odometer.update(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]), getSwerveModuleStates());
   }
 
   @Override
   public double[] getOdometryPosition() {
-    // TODO Auto-generated method stub
-    return null;
+    double [] pos = new double [3];
+    pos[0] = pigeon2.getRawAngles()[0];
+    pos[1] = BreakerUnits.metersToInches(odometer.getPoseMeters().getX());
+    pos[2] = BreakerUnits.metersToInches(odometer.getPoseMeters().getY());
+    return pos;
   }
 
   @Override
   public Pose2d getOdometryPoseMeters() {
-    // TODO Auto-generated method stub
-    return null;
+    return odometer.getPoseMeters();
   }
 
 

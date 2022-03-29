@@ -146,18 +146,12 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   }
 
   @Override
-  /** Updates the odometer position. */
   public void updateOdometry() {
     resetDriveEncoders();
     driveOdometer.update(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]), getLeftDriveMeters(), getRightDriveMeters());
   }
 
   @Override
-   /**
-     * Returns current 2d position as an array of doubles.
-     * 
-     * @return Array of X-Y-Angle position (in, in, deg).
-     */
   public double[] getOdometryPosition() {
     Pose2d basePose = driveOdometer.getPoseMeters();
     double xPos = Units.metersToInches(basePose.getX());
@@ -168,7 +162,6 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   }
 
   @Override
-
   public Pose2d getOdometryPoseMeters() {
     return driveOdometer.getPoseMeters();
   }

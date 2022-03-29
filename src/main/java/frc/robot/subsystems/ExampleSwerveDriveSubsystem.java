@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDrive;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDriveConfig;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDriveOdometry;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveModule;
 
 public class ExampleSwerveDriveSubsystem extends SubsystemBase {
@@ -33,12 +32,8 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
 
   BreakerSwerveDrive drivetrain;
 
-  BreakerSwerveDriveOdometry driveOdometry;
-
   public ExampleSwerveDriveSubsystem(BreakerPigeon2 imu) {
-    driveConfig = new BreakerSwerveDriveConfig(maxForwardVel, maxSidewaysVel, maxAngVel, moduleAnglekP, 
-    moduleAnglekI, moduleAngleKd, moduleVelkP, moduleVelkI, moduleVelKd, turnMotorGearRatioToOne, 
-    driveMotorGearRatioToOne, wheelDiameter, wheelPositionsRelativeToCenter);
+    driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
 
     driveLF = new WPI_TalonFX(0);
     turnLF = new WPI_TalonFX(0);
@@ -54,16 +49,14 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
     leftBackModule = new BreakerSwerveModule(driveLB, turnLB, driveConfig);
     rightBackModule = new BreakerSwerveModule(driveRB, turnRB, driveConfig);
 
-    drivetrain = new BreakerSwerveDrive(driveConfig, leftFrontModule, rightFrontModule, leftBackModule, rightBackModule);
+    drivetrain = new BreakerSwerveDrive(driveConfig, imu, leftFrontModule, rightFrontModule, leftBackModule, rightBackModule);
 
     imu = new BreakerPigeon2(0, true);
-
-    driveOdometry = new BreakerSwerveDriveOdometry(driveConfig, imu, drivetrain);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    driveOdometry.update();
+    drivetrain.updateOdometry();;
   }
 }

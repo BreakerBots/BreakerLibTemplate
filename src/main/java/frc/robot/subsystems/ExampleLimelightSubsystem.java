@@ -15,6 +15,7 @@ public class ExampleLimelightSubsystem extends SubsystemBase {
   LimelightTarget targetB;
   public ExampleLimelightSubsystem() {
     limelight = new BreakerLimelight("limelight");
+    
     targetA = new LimelightTarget(102, limelight, 0);
     targetB = new LimelightTarget(15, limelight, 1);
   }

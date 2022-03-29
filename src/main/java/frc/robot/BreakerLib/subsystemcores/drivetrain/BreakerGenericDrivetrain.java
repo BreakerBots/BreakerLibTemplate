@@ -13,8 +13,14 @@ public abstract class BreakerGenericDrivetrain {
 
     public abstract Object getOdometer();
 
+    /** Updates the odometer position. */
     public abstract void updateOdometry();
 
+    /**
+     * Returns current 2d position as an array of doubles.
+     * 
+     * @return Array of X-Y-Angle position (in, in, deg).
+     */
     public abstract double[] getOdometryPosition();
 
     public abstract Pose2d getOdometryPoseMeters();
