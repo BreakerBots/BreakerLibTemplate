@@ -7,11 +7,15 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.differential;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
@@ -25,9 +29,11 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX[] rightMotors;
   private DifferentialDrive diffDrive;
   private BreakerDiffDriveConfig driveConfig;
+  private BreakerPigeon2 pigeon2;
+  private DifferentialDriveOdometry driveOdometer;
   
   /** Creates a new West Coast Drive. */
-  public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerDiffDriveConfig driveConfig) {
+  public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerPigeon2 pigeon2, BreakerDiffDriveConfig driveConfig) {
     leftDrive = new MotorControllerGroup(leftLead, leftMotors);
     leftDrive.setInverted(invertL);
     leftLead = leftMotors[0];
@@ -38,9 +44,12 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
 
     diffDrive = new DifferentialDrive(leftDrive, rightDrive);
 
+    driveOdometer = new DifferentialDriveOdometry(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]));
+
     driveConfig = this.driveConfig;
     leftMotors = this.leftMotors;
     rightMotors = this.rightMotors;
+    this.pigeon2 = pigeon2;
   }
 
   public void arcadeDrive(double netSpeed, double turnSpeed) {
@@ -127,32 +136,40 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   }
 
   @Override
-  public void setOdometry() {
-    // TODO Auto-generated method stub
-    
+  public void setOdometry(Pose2d poseMeters, double gyroAngle) {
+    driveOdometer.resetPosition(poseMeters, Rotation2d.fromDegrees(gyroAngle));
   }
 
   @Override
-  public void getOdometer() {
-    // TODO Auto-generated method stub
-    
+  public Object getOdometer() {
+    return driveOdometer; 
   }
 
   @Override
+  /** Updates the odometer position. */
   public void updateOdometry() {
-    // TODO Auto-generated method stub
+    resetDriveEncoders();
+    driveOdometer.update(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]), getLeftDriveMeters(), getRightDriveMeters());
+  }
+
+  @Override
+   /**
+     * Returns current 2d position as an array of doubles.
+     * 
+     * @return Array of X-Y-Angle position (in, in, deg).
+     */
+  public double[] getOdometryPosition() {
+    Pose2d basePose = driveOdometer.getPoseMeters();
+    double xPos = Units.metersToInches(basePose.getX());
+    double yPos = Units.metersToInches(basePose.getY());
+    double degPos = basePose.getRotation().getDegrees();
+    return new double[] { xPos, yPos, degPos };
     
   }
 
   @Override
-  public void getOdometryPosition() {
-    // TODO Auto-generated method stub
-    
-  }
 
-  @Override
-  public void getOdometryPoseMeters() {
-    // TODO Auto-generated method stub
-    
+  public Pose2d getOdometryPoseMeters() {
+    return driveOdometer.getPoseMeters();
   }
 }

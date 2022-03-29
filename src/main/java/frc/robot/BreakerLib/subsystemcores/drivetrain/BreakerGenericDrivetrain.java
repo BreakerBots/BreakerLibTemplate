@@ -4,16 +4,18 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 /** Contianer class for methods common to all drivetrain types */
 public abstract class BreakerGenericDrivetrain {
     
-    public abstract void setOdometry();
+    public abstract void setOdometry(Pose2d poseMeters, double gyroAngle);
 
-    public abstract void getOdometer();
+    public abstract Object getOdometer();
 
     public abstract void updateOdometry();
 
-    public abstract void getOdometryPosition();
+    public abstract double[] getOdometryPosition();
 
-    public abstract void getOdometryPoseMeters();
+    public abstract Pose2d getOdometryPoseMeters();
 }

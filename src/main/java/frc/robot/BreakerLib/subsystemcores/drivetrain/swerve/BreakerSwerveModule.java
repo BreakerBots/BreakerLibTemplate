@@ -6,6 +6,7 @@ package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.BreakerLib.util.BreakerMath;
@@ -16,6 +17,7 @@ public class BreakerSwerveModule {
     private BreakerSwerveDriveConfig config;
     private PIDController drivePID;
     private PIDController anglePID;
+    private SimpleMotorFeedforward driveFF;
     private WPI_TalonFX turnMotor;
     private WPI_TalonFX driveMotor;
     public BreakerSwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX turnMotor, BreakerSwerveDriveConfig config) {
@@ -24,12 +26,12 @@ public class BreakerSwerveModule {
         this.driveMotor = driveMotor;
         anglePID = new PIDController(config.getModuleAnglekP(), config.getModuleAnglekI(), config.getModuleAngleKd());
         drivePID = new PIDController(config.getModuleVelkP(), config.getModuleVelkI(), config.getModuleVelKd());
-        
+        driveFF = new SimpleMotorFeedforward(config.getVelFeedForwardKs(), config.getVelFeedForwardKv());
     }
     
     public void setModuleTarget(Rotation2d tgtAngle, double speedMetersPreSec) {
         turnMotor.set(anglePID.calculate(getModuleAngle(), tgtAngle.getDegrees()));
-        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec));
+        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec) + driveFF.calculate(speedMetersPreSec));
     }
 
     public void setModuleTarget(SwerveModuleState targetState) {

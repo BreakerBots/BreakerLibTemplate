@@ -11,9 +11,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 public class BreakerSwerveDriveConfig {
     // https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 
-    public static final double AXLE_WIDTH_DISTANCE = 0;
-    public static final double AXLE_LENGTH_DISTANCE = 0;
-
     private double maxForwardVel;
     private double maxSidewaysVel;
     private double maxAngleVel;
@@ -27,13 +24,15 @@ public class BreakerSwerveDriveConfig {
     private double turnMotorGearRatioToOne;
     private double driveMotorGearRatioToOne;
     public double wheelDiameter;
+    private double velFeedForwardKs;
+    private double velFeedForwardKv;
 
     private SwerveDriveKinematics kinematics;
     /** The overall configuration for a Breaker Swerve Drive, must be passed in. */
     public BreakerSwerveDriveConfig(double maxForwardVel, double maxSidewaysVel, double maxAngVel, 
         double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
         double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne,
-        double wheelDiameter, Translation2d... wheelPositionsRelativeToCenter) {
+        double wheelDiameter, double velFeedForwardKs, double velFeedForwardKv, Translation2d... wheelPositionsRelativeToCenter) {
 
         this.maxForwardVel = maxForwardVel;
         this.maxSidewaysVel = maxSidewaysVel;
@@ -47,6 +46,8 @@ public class BreakerSwerveDriveConfig {
         this.wheelDiameter = wheelDiameter;
         this.turnMotorGearRatioToOne = turnMotorGearRatioToOne;
         this.driveMotorGearRatioToOne = driveMotorGearRatioToOne;
+        this.velFeedForwardKs = velFeedForwardKs;
+        this.velFeedForwardKv = velFeedForwardKv;
 
         moduleNum = wheelPositionsRelativeToCenter.length;
         kinematics = new SwerveDriveKinematics(wheelPositionsRelativeToCenter);
@@ -106,5 +107,13 @@ public class BreakerSwerveDriveConfig {
 
     public double getWheelDiameter() {
         return wheelDiameter;
+    }
+
+    public double getVelFeedForwardKs() {
+        return velFeedForwardKs;
+    }
+
+    public double getVelFeedForwardKv() {
+        return velFeedForwardKv;
     }
 }

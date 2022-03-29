@@ -4,8 +4,16 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
+import com.ctre.phoenix.sensors.Pigeon2;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
+import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
@@ -18,16 +26,19 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   private BreakerSwerveModule frontRightModule;
   private BreakerSwerveModule backLeftModule;
   private BreakerSwerveModule backRightModule;
+
+  private BreakerPigeon2 pigeon2;
   /** Constructs a new swerve based drivetrain
    * @param config - the confiuration values for the drivetrain's charicotristics and behavor, passed in as a "BreakerSwerveDriveConfig" object
    * @param swerveModules - The four swerve drive modules that make up the drivetrain, must be passed in the same order shown below
    */
-  public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerSwerveModule frontLeftModule, BreakerSwerveModule frontRightModule, BreakerSwerveModule backLeftModule, BreakerSwerveModule backRightModule) {
+  public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerPigeon2 pigeon2, BreakerSwerveModule frontLeftModule, BreakerSwerveModule frontRightModule, BreakerSwerveModule backLeftModule, BreakerSwerveModule backRightModule) {
     this.config = config;
     this.frontLeftModule = frontRightModule;
     this.frontRightModule = frontRightModule;
     this.backLeftModule = backLeftModule;
     this.backRightModule = backRightModule;
+    this.pigeon2 = pigeon2;
   }
 
   /** Standard drivetrain movement command, specifyes robot speed in each axis including robot rotation (radian per second). 
@@ -45,6 +56,20 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     move((forwardPercent * config.getMaxForwardVel()), (horizontalPercent * config.getMaxSidewaysVel()), (turnPercent * config.getMaxAngleVel()));
   }
 
+  public void moveRelativeToField(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
+    double gyroRad = Math.toRadians(pigeon2.getYaw());
+    double newFwd = forwardVelMetersPerSec * Math.cos(gyroRad) + horizontalVelMetersPerSec * Math.sin(gyroRad);
+    double newHorz = -forwardVelMetersPerSec * Math.sin(gyroRad) + horizontalVelMetersPerSec * Math.cos(gyroRad);
+    move(newFwd, newHorz, radPerSec);
+  }
+
+  public void moveWithPrecentImputRelativeToField(double forwardPercent, double horizontalPercent, double turnPercent) {
+    double fwdV = forwardPercent * config.getMaxForwardVel();
+    double horzV = horizontalPercent * config.getMaxSidewaysVel();
+    double thetaV = turnPercent * config.getMaxAngleVel();
+    moveRelativeToField(fwdV, horzV, thetaV);
+  }
+
   public SwerveModuleState[] getSwerveModuleStates() {
     currentModuleStates[0] = frontLeftModule.getModuleState();
     currentModuleStates[1] = frontRightModule.getModuleState();
@@ -54,15 +79,15 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   }
 
   @Override
-  public void setOdometry() {
+  public void setOdometry(Pose2d poseMeters, double gyroAngle) {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public void getOdometer() {
+  public Object getOdometer() {
     // TODO Auto-generated method stub
-    
+    return null;
   }
 
   @Override
@@ -72,9 +97,15 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   }
 
   @Override
-  public void getOdometryPosition() {
+  public double[] getOdometryPosition() {
     // TODO Auto-generated method stub
-    
+    return null;
+  }
+
+  @Override
+  public Pose2d getOdometryPoseMeters() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 
