@@ -4,14 +4,13 @@
 
 package frc.robot.BreakerLib.util;
 
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.RobotController;
 
 /** Add your docs here. */
-public class Logger {;
-    private Logger() {
-        DataLogManager.logNetworkTables(false);
+public class BreakerLog {
+    
+    public static void startLog(boolean autologNetworkTables) {
+        DataLogManager.logNetworkTables(autologNetworkTables);
         DataLogManager.start();
     }
     

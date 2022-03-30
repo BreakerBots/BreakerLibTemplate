@@ -208,7 +208,7 @@ public class BreakerPigeon2 extends BreakerGenaricDevice {
       faults += "  ACCEL_FAULT ";
     }
     if (curFaults.UnderVoltage) {
-      currentHealth = DeviceHealth.FAULT;
+      currentHealth = (currentHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : currentHealth;
       faults += " UNDER_6.5V ";
     }
     if (!curFaults.HardwareFault && !curFaults.MagnetometerFault && !curFaults.GyroFault 

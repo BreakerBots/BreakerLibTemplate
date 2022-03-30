@@ -10,7 +10,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.Logger;
+import frc.robot.BreakerLib.util.BreakerLog;
 
 public class SelfTest extends SubsystemBase {
   /** Creates a new SelfTest. */
@@ -60,7 +60,7 @@ public class SelfTest extends SubsystemBase {
       lastCheckPassed = true;
     }
     lastSystemCheck = work.toString();
-    Logger.log(lastSystemCheck);
+    BreakerLog.log(lastSystemCheck);
   }
 
   @Override
