@@ -2,9 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.BreakerLib.devices;
+import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.Pigeon2_Faults;
+import com.ctre.phoenix.sensors.Pigeon2_StickyFaults;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BreakerLib.devices.vision.LimelightTarget;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
@@ -12,6 +16,9 @@ import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 public class BreakerPigeon2 extends BreakerGenaricDevice {
   private WPI_Pigeon2 pigeon;
   private double imuInvert;
+  private DeviceHealth currentHealth = DeviceHealth.NOMINAL;
+  private String faults = null;
+  private String deviceName = "Pigeon2_IMU";
   private double pitch;
   private double yaw;
   private double roll;
@@ -178,24 +185,57 @@ public class BreakerPigeon2 extends BreakerGenaricDevice {
   public int getPigeonUpTime() {
     return pigeon.getUpTime();
   }
+
   @Override
   public void runSelfTest() {
-    // TODO Auto-generated method stub
+    Pigeon2_Faults curFaults = new Pigeon2_Faults();
+    pigeon.getFaults(curFaults);
+    if (curFaults.HardwareFault) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults += " HARDWARE_FAULT ";
+    } 
+    if (curFaults.MagnetometerFault) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults += " MAG_FAULT ";
+    }
+    if (curFaults.GyroFault) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults += "  GYRO_FAULT ";
+    }
+    if (curFaults.AccelFault) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults += "  ACCEL_FAULT ";
+    }
+    if (curFaults.UnderVoltage) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults += " UNDER_6.5V ";
+    }
+    if (!curFaults.HardwareFault && !curFaults.MagnetometerFault && !curFaults.GyroFault 
+    && !curFaults.AccelFault && !curFaults.UnderVoltage) {
+      currentHealth = DeviceHealth.NOMINAL;
+      faults = null;
+    }
   }
+
   @Override
   public DeviceHealth getHealth() {
-    // TODO Auto-generated method stub
-    return null;
+    return currentHealth;
   }
   @Override
   public String getFaults() {
-    // TODO Auto-generated method stub
-    return null;
+    return faults;
   }
   @Override
   public String getDeviceName() {
-    // TODO Auto-generated method stub
-    return null;
+    return deviceName;
+  }
+  @Override
+  public boolean hasFault() {
+    return currentHealth != DeviceHealth.NOMINAL;
+  }
+  @Override
+  public void setDeviceName(String newName) {
+    deviceName = newName;
   }
 }
 

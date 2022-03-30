@@ -14,8 +14,8 @@ public class BreakerLimelight extends BreakerGenaricDevice {
   private double mountingHeight;
   private String limelightName;
   private LimelightTarget currentTarget;
-  private DeviceHealth currentHealth;
-  private String faults = "none";
+  private DeviceHealth currentHealth = DeviceHealth.NOMINAL;
+  private String faults = null;
   /** Creates an new vision prossesing limelight
    * @param limelightName the network name of the limelight you are initializing
    */
@@ -111,10 +111,10 @@ public class BreakerLimelight extends BreakerGenaricDevice {
   public void runSelfTest() {
     if (getAllVisionData()[5] == 0) {
       currentHealth = DeviceHealth.INOPERABLE;
-      faults = "limelightDisconnected";
+      faults = " LIMELIGHT_DISCONNECTED ";
     } else {
       currentHealth = DeviceHealth.NOMINAL;
-      faults = "none";
+      faults = null;
     }
   }
 
@@ -131,5 +131,15 @@ public class BreakerLimelight extends BreakerGenaricDevice {
   @Override
   public String getDeviceName() {
     return limelightName;
+  }
+
+  @Override
+  public boolean hasFault() {
+    return currentHealth != DeviceHealth.NOMINAL;
+  }
+
+  @Override
+  /** Does nouthing, exsits to satisfy BreakerGenaricDevice class */
+  public void setDeviceName(String newName) {
   }
 }

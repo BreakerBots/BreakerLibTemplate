@@ -9,37 +9,58 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
+import frc.robot.BreakerLib.util.Logger;
 
 public class SelfTest extends SubsystemBase {
   /** Creates a new SelfTest. */
   private int cycleCount;
+  private static String lastSystemCheck;
   private static List<BreakerGenaricDevice> devices = new ArrayList<BreakerGenaricDevice>();
-  public SelfTest() {
+  private int cyclesbetweenPerSelfCecks;
+  private static boolean lastCheckPassed;
+  public SelfTest(double secondsBetweenPeriodicSelfChecks) {
+    cyclesbetweenPerSelfCecks = (int) (secondsBetweenPeriodicSelfChecks * 50);
   }
 
   public static void addDevice(BreakerGenaricDevice device) {
     devices.add(device);
   }
 
+  public static String getLastSelfCheck() {
+    return lastSystemCheck;
+  }
+
+  public static boolean getLastSelfCheckPassed() {
+    return lastCheckPassed;
+  }
+
+  public static void runDevicesSelfCheck() {
+    StringBuilder work = new StringBuilder(" RUNNING SELF CHECK: ");
+    List<BreakerGenaricDevice> faultDevices = new ArrayList<BreakerGenaricDevice>();
+    for (BreakerGenaricDevice device: devices) {
+      device.runSelfTest();
+      if (device.hasFault()) {
+        faultDevices.add(device);
+      }
+    }
+    if (faultDevices.size() != 0) {
+      work.append(" SELF CHECK FAILED - FAULTS FOUND: ");
+      lastCheckPassed = false;
+      for (BreakerGenaricDevice faultDiv: faultDevices) {
+        work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
+      }
+    } else {
+      work.append(" SELF CHECK PASSED ");
+      lastCheckPassed = true;
+    }
+    lastSystemCheck = work.toString();
+    Logger.log(lastSystemCheck);
+  }
+
   @Override
   public void periodic() {
-    if (cycleCount ++ % 250 == 0) {
-      StringBuilder work = new StringBuilder(" SELF CHECK: ");
-      List<BreakerGenaricDevice> faultDevices = new ArrayList<BreakerGenaricDevice>();
-      for (BreakerGenaricDevice device: devices) {
-        device.runSelfTest();
-        if (device.getHealth() != DeviceHealth.NOMINAL) {
-          faultDevices.add(device);
-        }
-      }
-      if (faultDevices.size() != 0) {
-        work.append(" SELF CHECK FAILED - FAULTS FOUND: ");
-        for (BreakerGenaricDevice faultDiv: faultDevices) {
-          work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
-        }
-      } else {
-        work.append(" SELF CHECK PASSED ");
-      }
+    if (cycleCount ++ % cyclesbetweenPerSelfCecks == 0) {
+      runDevicesSelfCheck();
     }
   }
 }

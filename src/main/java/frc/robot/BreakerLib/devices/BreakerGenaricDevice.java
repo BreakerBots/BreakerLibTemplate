@@ -15,4 +15,8 @@ public abstract class BreakerGenaricDevice {
     public abstract String getFaults();
 
     public abstract String getDeviceName();
+
+    public abstract boolean hasFault();
+
+    public abstract void setDeviceName();
 }

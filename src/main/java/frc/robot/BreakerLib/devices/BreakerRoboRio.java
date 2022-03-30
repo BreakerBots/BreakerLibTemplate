@@ -4,6 +4,9 @@
 
 package frc.robot.BreakerLib.devices;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
@@ -24,6 +27,6 @@ public class BreakerRoboRio {
     }
 
     public static double getRobotTimeSeconds() {
-        return RobotController.getFPGATime();
+        return BreakerUnits.microsecondsToSeconds(RobotController.getFPGATime());
     }
 }
