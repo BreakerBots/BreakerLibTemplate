@@ -10,6 +10,6 @@ public enum DeviceHealth {
     NOMINAL,
     /** Device has encountered one or more problems but can still function. */
     FAULT,
-    /** Device has encounterd one or more fatal errors, meaning the device no longer in in working condition */
+    /** Device has encounterd one or more fatal errors, meaning the device is no longer in working condition */
     INOPERABLE
 }
