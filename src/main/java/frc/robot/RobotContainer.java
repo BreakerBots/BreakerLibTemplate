@@ -8,8 +8,12 @@ import com.ctre.phoenix.Logger;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.BreakerLib.devices.BreakerPigeon2;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 import frc.robot.BreakerLib.util.BreakerLog;
+import frc.robot.BreakerLib.util.selftest.SelfTest;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.ExampleDriveSubsystem;
 import frc.robot.subsystems.TestSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -24,6 +28,12 @@ public class RobotContainer {
   private final TestSubsystem m_exampleSubsystem = new TestSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  private final BreakerPigeon2 pigeon2 = new BreakerPigeon2(10, true);
+
+  private final ExampleDriveSubsystem diffDrivetrain = new ExampleDriveSubsystem(pigeon2);
+
+  private final SelfTest selfTest = new SelfTest(diffDrivetrain.getBaseDrivetrain(), 5d);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

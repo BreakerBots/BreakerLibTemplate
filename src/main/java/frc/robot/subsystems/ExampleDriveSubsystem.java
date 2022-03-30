@@ -14,7 +14,7 @@ import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDr
 import frc.robot.BreakerLib.util.BreakerMotorControl;
 
 
-public class ExampleDriveSubsystem<drivetrain> extends SubsystemBase {
+public class ExampleDriveSubsystem extends SubsystemBase {
   /** Creates a new ExampleDriveSubsystem. */
   BreakerDiffDrive drivetrain;
   BreakerDiffDriveConfig driveConfig;
@@ -46,6 +46,10 @@ public class ExampleDriveSubsystem<drivetrain> extends SubsystemBase {
     drivetrain = new BreakerDiffDrive(leftMotors, rightMotors, false, true, pigeon2, driveConfig);
 
     this.pigeon2 = pigeon2;
+  }
+
+  public BreakerDiffDrive getBaseDrivetrain() {
+    return drivetrain;
   }
 
   @Override
