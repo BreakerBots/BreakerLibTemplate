@@ -188,6 +188,7 @@ public class BreakerPigeon2 extends BreakerGenaricDevice {
 
   @Override
   public void runSelfTest() {
+    faults = null;
     Pigeon2_Faults curFaults = new Pigeon2_Faults();
     pigeon.getFaults(curFaults);
     if (curFaults.HardwareFault) {
@@ -207,7 +208,7 @@ public class BreakerPigeon2 extends BreakerGenaricDevice {
       faults += "  ACCEL_FAULT ";
     }
     if (curFaults.UnderVoltage) {
-      currentHealth = DeviceHealth.INOPERABLE;
+      currentHealth = DeviceHealth.FAULT;
       faults += " UNDER_6.5V ";
     }
     if (!curFaults.HardwareFault && !curFaults.MagnetometerFault && !curFaults.GyroFault 

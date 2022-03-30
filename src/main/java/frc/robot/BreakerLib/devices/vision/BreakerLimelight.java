@@ -109,6 +109,7 @@ public class BreakerLimelight extends BreakerGenaricDevice {
 
   @Override
   public void runSelfTest() {
+    faults = null;
     if (getAllVisionData()[5] == 0) {
       currentHealth = DeviceHealth.INOPERABLE;
       faults = " LIMELIGHT_DISCONNECTED ";

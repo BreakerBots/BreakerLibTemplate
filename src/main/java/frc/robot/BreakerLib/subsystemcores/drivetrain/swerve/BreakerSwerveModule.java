@@ -4,6 +4,7 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 /** Add your docs here. */
 public class BreakerSwerveModule {
@@ -20,6 +22,10 @@ public class BreakerSwerveModule {
     private SimpleMotorFeedforward driveFF;
     private WPI_TalonFX turnMotor;
     private WPI_TalonFX driveMotor;
+    private DeviceHealth turnMotorHealth = DeviceHealth.NOMINAL;
+    private DeviceHealth driveMotorHealth = DeviceHealth.NOMINAL;
+    private DeviceHealth overallHealth = DeviceHealth.NOMINAL;
+    private String faults = null;
     public BreakerSwerveModule(WPI_TalonFX driveMotor, WPI_TalonFX turnMotor, BreakerSwerveDriveConfig config) {
         this.config = config;
         this.turnMotor = turnMotor;
@@ -67,4 +73,59 @@ public class BreakerSwerveModule {
     public boolean atSetModuleState() {
         return (atAngleSetpoint() && atVelSetpoint());
     }
+
+    public void runModuleSelfCheck() {
+        faults = null;
+        Faults curTurnFaults = new Faults();
+        Faults curDriveFaults = new Faults();
+        turnMotor.getFaults(curTurnFaults);
+        driveMotor.getFaults(curDriveFaults);
+        if (curDriveFaults.HardwareFailure) {
+            driveMotorHealth = DeviceHealth.INOPERABLE;
+            faults += " DRIVE_MOTOR_FAIL ";
+        }
+        if (curTurnFaults.HardwareFailure) {
+            turnMotorHealth = DeviceHealth.INOPERABLE;
+            faults += " TURN_MOTOR_FAIL ";
+        }
+        if (curTurnFaults.HardwareFailure ^ curDriveFaults.HardwareFailure) {
+            overallHealth = DeviceHealth.FAULT;
+        } else if (curTurnFaults.HardwareFailure && curDriveFaults.HardwareFailure) {
+            overallHealth = DeviceHealth.INOPERABLE;
+        }
+        if (curTurnFaults.SupplyUnstable) {
+            faults += " TURN_MOTOR_UNSTABLE_SUPPLY ";
+            turnMotorHealth = (turnMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : turnMotorHealth;
+        }
+        if (curDriveFaults.SupplyUnstable) {
+            faults += " DRIVE_MOTOR_UNSTABLE_SUPPLY ";
+            driveMotorHealth = (driveMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : driveMotorHealth;
+        }
+        if (!curDriveFaults.HardwareFailure && !curTurnFaults.HardwareFailure && !curTurnFaults.SupplyUnstable && !curDriveFaults.SupplyUnstable) {
+            faults = null;
+            driveMotorHealth = DeviceHealth.NOMINAL;
+            turnMotorHealth = DeviceHealth.NOMINAL;
+            overallHealth = DeviceHealth.NOMINAL;
+        }
+    }
+
+    /** returns the modules health as an array [0] = overall, [1] = drive motor, [2] = turn motor.
+     */
+    public DeviceHealth[] getModuleHealth() {
+        DeviceHealth[] healths = new DeviceHealth[3];
+        healths[0] = overallHealth;
+        healths[1] = driveMotorHealth;
+        healths[2] = turnMotorHealth;
+        return healths;
+    }
+
+    public boolean moduleHasFault() {
+        return overallHealth != DeviceHealth.NOMINAL;
+    }
+
+    public String getModuleFaults() {
+        return faults;
+    }
+
+
 }

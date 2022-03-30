@@ -9,6 +9,7 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.Logger;
 
 public class SelfTest extends SubsystemBase {
@@ -18,8 +19,10 @@ public class SelfTest extends SubsystemBase {
   private static List<BreakerGenaricDevice> devices = new ArrayList<BreakerGenaricDevice>();
   private int cyclesbetweenPerSelfCecks;
   private static boolean lastCheckPassed;
-  public SelfTest(double secondsBetweenPeriodicSelfChecks) {
+  private static BreakerGenericDrivetrain drivetrain;
+  public SelfTest(BreakerGenericDrivetrain drivetrain, double secondsBetweenPeriodicSelfChecks) {
     cyclesbetweenPerSelfCecks = (int) (secondsBetweenPeriodicSelfChecks * 50);
+    this.drivetrain = drivetrain;
   }
 
   public static void addDevice(BreakerGenaricDevice device) {
@@ -34,7 +37,7 @@ public class SelfTest extends SubsystemBase {
     return lastCheckPassed;
   }
 
-  public static void runDevicesSelfCheck() {
+  public static void runSelfCheck() {
     StringBuilder work = new StringBuilder(" RUNNING SELF CHECK: ");
     List<BreakerGenaricDevice> faultDevices = new ArrayList<BreakerGenaricDevice>();
     for (BreakerGenaricDevice device: devices) {
@@ -49,6 +52,9 @@ public class SelfTest extends SubsystemBase {
       for (BreakerGenaricDevice faultDiv: faultDevices) {
         work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
       }
+      if (drivetrain.driveHasFault()) {
+        work.append(" Drivetrain -" + drivetrain.getDriveFaults());
+      }
     } else {
       work.append(" SELF CHECK PASSED ");
       lastCheckPassed = true;
@@ -60,7 +66,7 @@ public class SelfTest extends SubsystemBase {
   @Override
   public void periodic() {
     if (cycleCount ++ % cyclesbetweenPerSelfCecks == 0) {
-      runDevicesSelfCheck();
+      runSelfCheck();
     }
   }
 }

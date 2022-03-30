@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   private BreakerSwerveDriveConfig config;
@@ -112,6 +113,32 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   @Override
   public Pose2d getOdometryPoseMeters() {
     return odometer.getPoseMeters();
+  }
+
+  @Override
+  public void runSelfCheck() {
+    frontLeftModule.runModuleSelfCheck();
+    frontRightModule.runModuleSelfCheck();
+    backLeftModule.runModuleSelfCheck();
+    backRightModule.runModuleSelfCheck();
+  }
+
+  @Override
+  public DeviceHealth getDriveHealth() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getDriveFaults() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean driveHasFault() {
+    // TODO Auto-generated method stub
+    return false;
   }
 
 

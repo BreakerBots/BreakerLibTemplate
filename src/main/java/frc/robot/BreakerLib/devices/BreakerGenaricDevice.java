@@ -18,5 +18,5 @@ public abstract class BreakerGenaricDevice {
 
     public abstract boolean hasFault();
 
-    public abstract void setDeviceName();
+    public abstract void setDeviceName(String newName);
 }

@@ -5,6 +5,7 @@
 package frc.robot.BreakerLib.subsystemcores.drivetrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 /** Contianer class for methods common to all drivetrain types */
 public abstract class BreakerGenericDrivetrain {
@@ -24,4 +25,12 @@ public abstract class BreakerGenericDrivetrain {
     public abstract double[] getOdometryPosition();
 
     public abstract Pose2d getOdometryPoseMeters();
+
+    public abstract void runSelfCheck();
+
+    public abstract DeviceHealth getDriveHealth();
+
+    public abstract String getDriveFaults();
+
+    public abstract boolean driveHasFault();
 }
