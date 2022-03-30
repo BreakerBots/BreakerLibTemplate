@@ -19,6 +19,7 @@ import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
@@ -164,5 +165,29 @@ public class BreakerDiffDrive extends BreakerGenericDrivetrain {
   @Override
   public Pose2d getOdometryPoseMeters() {
     return driveOdometer.getPoseMeters();
+  }
+
+  @Override
+  public void runSelfCheck() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public DeviceHealth getDriveHealth() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getDriveFaults() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean driveHasFault() {
+    // TODO Auto-generated method stub
+    return false;
   }
 }
