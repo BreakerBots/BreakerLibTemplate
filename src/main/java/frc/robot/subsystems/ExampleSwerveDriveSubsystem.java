@@ -50,8 +50,6 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
     rightBackModule = new BreakerSwerveModule(driveRB, turnRB, driveConfig);
 
     drivetrain = new BreakerSwerveDrive(driveConfig, imu, leftFrontModule, rightFrontModule, leftBackModule, rightBackModule);
-
-    imu = new BreakerPigeon2(0, true);
   }
 
   @Override
