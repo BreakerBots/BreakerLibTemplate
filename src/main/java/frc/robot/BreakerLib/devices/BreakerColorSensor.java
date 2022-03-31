@@ -12,7 +12,10 @@ import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 public class BreakerColorSensor extends BreakerGenaricDevice {
   /** Creates a new BreakerColorSensor. */
+  private DeviceHealth currentHealth = DeviceHealth.NOMINAL;
   private ColorSensorV3 colorSensor;
+  private String faults = null;
+  private String deviceName = "Color_Sensor_V3";
   public BreakerColorSensor(Port i2cPort) {
     colorSensor = new ColorSensorV3(i2cPort);
   }
@@ -25,6 +28,7 @@ public class BreakerColorSensor extends BreakerGenaricDevice {
     return (comparisionColor == colorSensor.getColor());
   }
 
+
   public int[] getRawColorsADC() {
     int[] colorVals = new int[4];
     colorVals[0] = colorSensor.getRawColor().red;
@@ -36,37 +40,39 @@ public class BreakerColorSensor extends BreakerGenaricDevice {
 
   @Override
   public void runSelfTest() {
-    // TODO Auto-generated method stub
-    
+    faults = null;
+    if (!colorSensor.isConnected()) {
+      currentHealth = DeviceHealth.INOPERABLE;
+      faults = " COLOR_SENSOR_NOT_CONNECTED ";
+    } else {
+      currentHealth = DeviceHealth.NOMINAL;
+      faults = null;
+    }
   }
 
   @Override
   public DeviceHealth getHealth() {
-    // TODO Auto-generated method stub
-    return null;
+    return currentHealth;
   }
 
   @Override
   public String getFaults() {
-    // TODO Auto-generated method stub
-    return null;
+    return faults;
   }
 
   @Override
   public String getDeviceName() {
-    // TODO Auto-generated method stub
-    return null;
+    return deviceName;
   }
 
   @Override
   public boolean hasFault() {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
   public void setDeviceName(String newName) {
-    // TODO Auto-generated method stub
+    deviceName = newName;
     
   }
 

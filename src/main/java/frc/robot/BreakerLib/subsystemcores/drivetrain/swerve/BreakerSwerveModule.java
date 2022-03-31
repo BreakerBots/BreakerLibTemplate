@@ -101,6 +101,22 @@ public class BreakerSwerveModule {
             faults += " DRIVE_MOTOR_UNSTABLE_SUPPLY ";
             driveMotorHealth = (driveMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : driveMotorHealth;
         }
+        if (curTurnFaults.UnderVoltage) {
+            faults += " TURN_MOTOR_UNDER_6.5V ";
+            turnMotorHealth = (turnMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : turnMotorHealth;
+        }
+        if (curDriveFaults.UnderVoltage) {
+            faults += " DRIVE_MOTOR_UNDER_6.5V ";
+            driveMotorHealth = (driveMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : driveMotorHealth;
+        }
+        if (curTurnFaults.SensorOutOfPhase) {
+            faults += " TURN_SENSOR_OUT_OF_PHASE ";
+            turnMotorHealth = (turnMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : turnMotorHealth;
+        }
+        if (curDriveFaults.SensorOutOfPhase) {
+            faults += " DRIVE_SENSOR_OUT_OF_PHASE ";
+            driveMotorHealth = (driveMotorHealth != DeviceHealth.INOPERABLE) ? DeviceHealth.FAULT : driveMotorHealth;
+        }
         if (!curDriveFaults.HardwareFailure && !curTurnFaults.HardwareFailure && !curTurnFaults.SupplyUnstable && !curDriveFaults.SupplyUnstable) {
             faults = null;
             driveMotorHealth = DeviceHealth.NOMINAL;
