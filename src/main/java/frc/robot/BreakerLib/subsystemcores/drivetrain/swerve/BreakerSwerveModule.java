@@ -37,7 +37,7 @@ public class BreakerSwerveModule {
     
     public void setModuleTarget(Rotation2d tgtAngle, double speedMetersPreSec) {
         turnMotor.set(anglePID.calculate(getModuleAngle(), tgtAngle.getDegrees()));
-        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec) + driveFF.calculate(speedMetersPreSec));
+        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), speedMetersPreSec) + (driveFF.calculate(speedMetersPreSec) / driveMotor.getBusVoltage()));
     }
 
     public void setModuleTarget(SwerveModuleState targetState) {

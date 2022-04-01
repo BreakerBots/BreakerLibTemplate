@@ -53,7 +53,7 @@ public class SelfTest extends SubsystemBase {
         work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
       }
       if (drivetrain.driveHasFault()) {
-        work.append(" Drivetrain -" + drivetrain.getDriveFaults());
+        work.append(" Drivetrain-" + drivetrain.getDriveFaults());
       }
     } else {
       work.append(" SELF CHECK PASSED ");

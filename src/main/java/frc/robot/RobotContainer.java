@@ -39,6 +39,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     BreakerLog.startLog(false);
+    SelfTest.addDevice(pigeon2);
     configureButtonBindings();
   }
 

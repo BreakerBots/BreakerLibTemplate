@@ -4,8 +4,10 @@
 
 package frc.robot.BreakerLib.devices;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
 
 import edu.wpi.first.wpilibj.util.Color;
 
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.util.Color;
 public class BreakerCANdle {
     private CANdle candle;
     private RainbowAnimation enabledStatus;
+    private StrobeAnimation errorStatus;
     int state1 = 0;
     int state2 = 0;
     int cycleCount1 = 0;
@@ -23,6 +26,7 @@ public class BreakerCANdle {
         candle.configAllSettings(config.getConfig());
         candle.setLEDs(255, 255, 255);
         enabledStatus = new RainbowAnimation(1, 0.5, numberOfLEDs);
+        errorStatus = new StrobeAnimation(255, 0, 0, 0, 0.5, numberOfLEDs);
     }
 
     public void setRobotEnabledStatusLED() {
@@ -41,24 +45,7 @@ public class BreakerCANdle {
     }
 
     public void runErrorStatusLED() {
-        switch (state2) {
-            case 0: 
-                candle.setLEDs(255, 0, 0);
-                cycleCount2 ++;
-                if (cycleCount2 >= 50) {
-                    cycleCount2 = 0;
-                    state2 = 1;
-                }
-            break;
-            default:
-            case 1:
-                candle.setLEDs(0, 0, 0);
-                cycleCount2 ++;
-                if (cycleCount2 >= 50) {
-                    cycleCount2 = 0;
-                    state2 = 0;
-                }
-        }
+        candle.animate(errorStatus);
     }
 
     public void runSpesificErrorStatusLED(Color errorColor) {

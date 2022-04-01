@@ -29,8 +29,6 @@ public class ExampleDriveSubsystem extends SubsystemBase {
   WPI_TalonFX[] leftMotors;
   WPI_TalonFX[] rightMotors;
 
-  BreakerPigeon2 pigeon2;
-
   public ExampleDriveSubsystem(BreakerPigeon2 pigeon2) {
     left1 = new WPI_TalonFX(0);
     left2 = new WPI_TalonFX(0);
@@ -44,8 +42,6 @@ public class ExampleDriveSubsystem extends SubsystemBase {
     
     driveConfig = new BreakerDiffDriveConfig(2048, 0, 0, 0, 0, 0, 0, null, null);
     drivetrain = new BreakerDiffDrive(leftMotors, rightMotors, false, true, pigeon2, driveConfig);
-
-    this.pigeon2 = pigeon2;
   }
 
   public BreakerDiffDrive getBaseDrivetrain() {

@@ -42,15 +42,23 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
     this.pigeon2 = pigeon2;
   }
 
+  public void setRawModuleStates(SwerveModuleState[] targetModuleStates) {
+    frontLeftModule.setModuleTarget(targetModuleStates[0]);
+    frontRightModule.setModuleTarget(targetModuleStates[1]);
+    backLeftModule.setModuleTarget(targetModuleStates[2]);
+    backRightModule.setModuleTarget(targetModuleStates[3]);
+  }
+
   /** Standard drivetrain movement command, specifyes robot speed in each axis including robot rotation (radian per second). 
    * All values are relative to the robot's orientation. */
   public void move(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
     ChassisSpeeds speeds = new ChassisSpeeds(forwardVelMetersPerSec, horizontalVelMetersPerSec, radPerSec);
     targetModuleStates = config.getKinematics().toSwerveModuleStates(speeds);
-    frontLeftModule.setModuleTarget(targetModuleStates[0]);
-    frontRightModule.setModuleTarget(targetModuleStates[1]);
-    backLeftModule.setModuleTarget(targetModuleStates[2]);
-    backRightModule.setModuleTarget(targetModuleStates[3]);
+    setRawModuleStates(targetModuleStates);
+  }
+
+  public void stop() {
+    move(0, 0, 0);
   }
 
   public void moveWithPrecentImput(double forwardPercent, double horizontalPercent, double turnPercent) {
@@ -133,6 +141,10 @@ public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
   public boolean driveHasFault() {
     // TODO Auto-generated method stub
     return false;
+  }
+
+  public BreakerSwerveDriveConfig getConfig() {
+      return config;
   }
 
 
