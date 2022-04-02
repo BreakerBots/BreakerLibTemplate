@@ -45,6 +45,11 @@ public class BreakerDiffDriveConfig {
         rightPID = this.rightPID;
     }
 
+    public void setPidTolerences(double[] tolerences) {
+        leftPID.setTolerance(tolerences[0], tolerences[1]);
+        rightPID.setTolerance(tolerences[2], tolerences[3]);
+    }
+
     public double getTicksPerInch() {
         return ticksPerInch;
     }

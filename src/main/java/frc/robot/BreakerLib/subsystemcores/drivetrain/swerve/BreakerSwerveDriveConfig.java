@@ -4,6 +4,7 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
+import edu.wpi.first.hal.simulation.AnalogInDataJNI;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -26,6 +27,11 @@ public class BreakerSwerveDriveConfig {
     public double wheelDiameter;
     private double velFeedForwardKs;
     private double velFeedForwardKv;
+    private boolean tolerencesHaveBeenSet = false;
+    private double driveVelTol;
+    private double drivePosTol;
+    private double angPosTol;
+    private double angVelTol;
 
     private SwerveDriveKinematics kinematics;
     /** The overall configuration for a Breaker Swerve Drive, must be passed in. */
@@ -51,6 +57,27 @@ public class BreakerSwerveDriveConfig {
 
         moduleNum = wheelPositionsRelativeToCenter.length;
         kinematics = new SwerveDriveKinematics(wheelPositionsRelativeToCenter);
+    }
+
+    public void setPidTolerences(double[] tolerences) {
+        drivePosTol = tolerences[0];
+        driveVelTol = tolerences[1];
+        angPosTol = tolerences[2];
+        angVelTol = tolerences[3];
+        tolerencesHaveBeenSet = true;
+    }
+
+    public double[] getPidTolerences() {
+        double[] tolerences = new double[4];
+        tolerences[0] = drivePosTol;
+        tolerences[1] = driveVelTol;
+        tolerences[2] = angPosTol;
+        tolerences[3] = angVelTol;
+        return tolerences;
+    }
+
+    public boolean getTolerencesHaveBeenSet() {
+        return tolerencesHaveBeenSet;
     }
 
     public SwerveDriveKinematics getKinematics() {

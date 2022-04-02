@@ -5,19 +5,17 @@
 package frc.robot.BreakerLib.auto.trajectory.swerveauto;
 
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryParameterizer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDrive;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDriveConfig;
 
 /** Add your docs here. */
 public class BreakerSwerveTrajectoryAuto extends CommandBase {
-    SwerveControllerCommand controller;
-    BreakerSwerveTrajectoryAutoConfig config;
-    BreakerSwerveDrive drivetrain;
-    Subsystem requiredSubsystem;
+    private SwerveControllerCommand controller;
+    private BreakerSwerveTrajectoryAutoConfig config;
+    private BreakerSwerveDrive drivetrain;
+    private Subsystem requiredSubsystem;
     private Trajectory[] trajectorysToFollow;
     private int currentTrajectory = 0;
     private int prevTrajectory = 0;
@@ -75,6 +73,6 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return commandIsFinished;
+        return commandIsFinished || (currentTrajectory > trajectorysToFollow.length);
     }
 }

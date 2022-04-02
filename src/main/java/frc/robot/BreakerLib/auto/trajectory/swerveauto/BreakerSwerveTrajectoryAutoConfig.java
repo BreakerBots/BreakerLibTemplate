@@ -26,6 +26,12 @@ public class BreakerSwerveTrajectoryAutoConfig {
         this.drivetrain = drivetrain;
     }
 
+    public void setPidTolerences(double[] tolernces) {
+        xPosPID.setTolerance(tolernces[0], tolernces[1]);
+        yPosPID.setTolerance(tolernces[2], tolernces[3]);
+        tAngPID.setTolerance(tolernces[4], tolernces[5]);
+    }
+
     public ProfiledPIDController gettAngPID() {
         return tAngPID;
     }

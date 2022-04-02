@@ -31,7 +31,13 @@ public class BreakerSwerveModule {
         this.turnMotor = turnMotor;
         this.driveMotor = driveMotor;
         anglePID = new PIDController(config.getModuleAnglekP(), config.getModuleAnglekI(), config.getModuleAngleKd());
+        if (config.getTolerencesHaveBeenSet()) {
+            anglePID.setTolerance(config.getPidTolerences()[2], config.getPidTolerences()[3]);
+        }
         drivePID = new PIDController(config.getModuleVelkP(), config.getModuleVelkI(), config.getModuleVelKd());
+        if (config.getTolerencesHaveBeenSet()) {
+            drivePID.setTolerance(config.getPidTolerences()[0], config.getPidTolerences()[1]);
+        }
         driveFF = new SimpleMotorFeedforward(config.getVelFeedForwardKs(), config.getVelFeedForwardKv());
     }
     
@@ -42,7 +48,7 @@ public class BreakerSwerveModule {
 
     public void setModuleTarget(SwerveModuleState targetState) {
         turnMotor.set(anglePID.calculate(getModuleAngle(), targetState.angle.getDegrees()));
-        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), targetState.speedMetersPerSecond));
+        driveMotor.set(drivePID.calculate(getModuleVelMetersPerSec(), targetState.speedMetersPerSecond) + (driveFF.calculate(targetState.speedMetersPerSecond) / driveMotor.getBusVoltage()));
     }
 
     public double getModuleAngle() {

@@ -34,6 +34,7 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
 
   public ExampleSwerveDriveSubsystem(BreakerPigeon2 imu) {
     driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+    driveConfig.setPidTolerences(tolerences);
 
     driveLF = new WPI_TalonFX(0);
     turnLF = new WPI_TalonFX(0);

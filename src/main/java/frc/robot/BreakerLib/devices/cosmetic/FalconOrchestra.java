@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class FalconOrchestra extends SubsystemBase {
     private Orchestra orchestra;
     private String[] currentPlaylist;
+    private String loopedSong;
     private int nextPlaylistSong = 0;
     private boolean runPlaylist = false;
+    private boolean runLooped = false;
+    
     public FalconOrchestra() {
         orchestra = new Orchestra();
     }
@@ -23,9 +26,17 @@ public class FalconOrchestra extends SubsystemBase {
         runPlaylist = true;
     }
 
+    public void startLoopedSong(String loopSongFilepath) {
+        loopedSong = loopSongFilepath;
+        runLooped = true;
+    }
     public void stopPlaylist() {
         runPlaylist = false;
         nextPlaylistSong = 0;
+    }
+
+    public void stopLoopedSong() {
+        runLooped = false;
     }
 
     public void stopMusic() {
@@ -53,8 +64,11 @@ public class FalconOrchestra extends SubsystemBase {
         return (orchestra.getCurrentTime() == 0) && !orchestra.isPlaying();
     }
 
-    @Override
-    public void periodic() {
+    public int getMusicTimestampMS() {
+        return orchestra.getCurrentTime();
+    }
+
+    private void runPlaylistLoop() {
         if (runPlaylist && isStoped()) {
             try {
                 orchestra.loadMusic(currentPlaylist[nextPlaylistSong]);
@@ -64,7 +78,19 @@ public class FalconOrchestra extends SubsystemBase {
                 nextPlaylistSong = 0;
                 orchestra.stop();
             }
-            
         }
+    }
+
+    private void runLoopedSong() {
+        if (runLooped && isStoped()) {
+            orchestra.loadMusic(loopedSong);
+            orchestra.play();
+        }
+    }
+
+    @Override
+    public void periodic() {
+        runPlaylistLoop();
+        runLoopedSong();
     }
 }
