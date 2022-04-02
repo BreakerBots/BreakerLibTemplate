@@ -4,16 +4,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.BreakerLib.auto.trajectory.swerveauto.BreakerSwerveTrajectoryAuto;
+import frc.robot.BreakerLib.auto.trajectory.swerveauto.BreakerSwerveTrajectoryAutoConfig;
+import frc.robot.subsystems.ExampleSwerveDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DiffDriveRamseteAutoExample extends SequentialCommandGroup {
   /** Creates a new DiffDriveRamseteAutoExample. */
-  public DiffDriveRamseteAutoExample() {
+  BreakerSwerveTrajectoryAutoConfig config;
+  public DiffDriveRamseteAutoExample(ExampleSwerveDriveSubsystem drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    config = new BreakerSwerveTrajectoryAutoConfig(drivetrain, xPositionKp, xPositionKi, xPositionKd, yPositionKp, yPositionKi, yPositionKd, thetaAngleKp, thetaAngleKi, thetaAngleKd, maxAllowedThetaVel, maxAllowedThetaAccel);
+    addCommands(
+      new BreakerSwerveTrajectoryAuto(config, true, drivetrain, TrajectoryGenerator.generateTrajectory(waypoints, config))
+    );
   }
 }

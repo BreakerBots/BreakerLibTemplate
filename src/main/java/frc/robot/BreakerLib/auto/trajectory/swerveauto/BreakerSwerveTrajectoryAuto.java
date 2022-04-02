@@ -5,6 +5,7 @@
 package frc.robot.BreakerLib.auto.trajectory.swerveauto;
 
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryParameterizer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -20,8 +21,10 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
     private Trajectory[] trajectorysToFollow;
     private int currentTrajectory = 0;
     private int prevTrajectory = 0;
+    private double totalTimeSeconds = 0;
     private boolean commandIsFinished = false;
     private boolean stopAtEnd = false;
+    private double currentTimeCycles = 0;
     BreakerSwerveTrajectoryAuto(BreakerSwerveTrajectoryAutoConfig config, Boolean stopAtEnd, Subsystem requiredSubsystem, Trajectory... trajectorysToFollow) {
         drivetrain = config.getDrivetrain();
         this.trajectorysToFollow = trajectorysToFollow;
@@ -31,7 +34,15 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        for (Trajectory trajectory: trajectorysToFollow) {
+            totalTimeSeconds += trajectory.getTotalTimeSeconds();
+        }
+    }
+
+    @Override
     public void execute() {
+        currentTimeCycles ++;
         if (currentTrajectory != prevTrajectory) {
             try {
                 controller = new SwerveControllerCommand(trajectorysToFollow[currentTrajectory], drivetrain::getOdometryPoseMeters, 
@@ -45,6 +56,14 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
         if (controller.isFinished()) {
             currentTrajectory ++;
         }
+    }
+
+    public double getTotalTimeSeconds() {
+        return totalTimeSeconds;
+    }
+
+    public double getCurrentTimeSeconds() {
+        return (currentTimeCycles / 50);
     }
 
     @Override
