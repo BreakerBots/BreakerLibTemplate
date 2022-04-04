@@ -38,15 +38,25 @@ public class BreakerFlywheel extends SubsystemBase {
         flywheelTargetRSU = BreakerUnits.RPMtoFalconRSU(flywheelTargetSpeedRPM);
     }
 
+    public double getFlywheelVelRSU() {
+        return lFlyMotor.getSelectedSensorVelocity();
+    }
+
+    public double getFlywheelTargetVelRSU() {
+        return flywheelTargetRSU;
+    }
     public void stopFlywheel() {
         runFlywheel = false;
         flywheel.set(0);
-        flywheelTargetRSU = 0;
     }
 
-    public void runFlywheel() {
+    public void startFlywheel() {
+        runFlywheel = true;
+    }
+
+    private void runFlywheel() {
         if (runFlywheel) {
-        double flySetSpd = flyPID.calculate(lFlyMotor.getSelectedSensorVelocity(), flywheelTargetRSU) + (flyFF.calculate(flywheelTargetRSU) / lFlyMotor.getBusVoltage());
+        double flySetSpd = flyPID.calculate(getFlywheelVelRSU(), flywheelTargetRSU) + (flyFF.calculate(flywheelTargetRSU) / lFlyMotor.getBusVoltage());
         flywheel.set(flySetSpd);
         }
     }
