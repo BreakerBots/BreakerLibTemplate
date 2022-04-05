@@ -100,6 +100,11 @@ public class BreakerUnits {
         return ((centimeters * MILLIMETERS_PER_CENTIMETER) / MILLIMETERS_PER_CENTIMETER);
     }
 
+    public static double RPMtoFalconRSU(double rpmVal) {
+        double tpm = rpmVal * 2048;
+        return tpm / 600;
+    }
+
     public enum ShortDistanceUnits {
         CENTIMETER,
         MILLIMETER,
