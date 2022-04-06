@@ -39,10 +39,10 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
   BreakerSwerveDrive drivetrain;
 
   public ExampleSwerveDriveSubsystem(BreakerPigeon2 imu) {
-    leftFrontModulePosition = new Translation2d(x, y);
-    rightFrontModulePosition = new Translation2d(x, y);
-    leftBackModulePosition = new Translation2d(x, y);
-    rightBackModulePosition = new Translation2d(x, y);
+    leftFrontModulePosition = new Translation2d(0, 0);
+    rightFrontModulePosition = new Translation2d(0, 0);
+    leftBackModulePosition = new Translation2d(0, 0);
+    rightBackModulePosition = new Translation2d(0, 0S);
 
     driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, leftFrontModulePosition, rightFrontModulePosition, leftBackModulePosition, rightBackModulePosition);
     driveConfig.setPidTolerences(tolerences);
