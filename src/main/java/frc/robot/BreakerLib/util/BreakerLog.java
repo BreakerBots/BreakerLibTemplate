@@ -18,6 +18,10 @@ public class BreakerLog {
       DataLogManager.log(" EVENT: " + event);
     }
 
+    public static void logBreakerLibEvent(String event) {
+        DataLogManager.log(" BREAKERLIB EVENT: " + event);
+    }
+
     public static void logError(String error) {
         DataLogManager.log(" ERROR: " + error);
     }

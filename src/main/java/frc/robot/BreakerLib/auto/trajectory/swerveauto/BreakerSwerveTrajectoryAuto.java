@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDrive;
+import frc.robot.BreakerLib.util.BreakerLog;
 
 /** Add your docs here. */
 public class BreakerSwerveTrajectoryAuto extends CommandBase {
@@ -36,6 +37,7 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
         for (Trajectory trajectory: trajectorysToFollow) {
             totalTimeSeconds += trajectory.getTotalTimeSeconds();
         }
+        BreakerLog.logBreakerLibEvent("BreakerSwerveTrajectoryAuto command instance started, total cumulative path time: " + totalTimeSeconds);
     }
 
     @Override
@@ -46,6 +48,7 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
                 controller = new SwerveControllerCommand(trajectorysToFollow[currentTrajectory], drivetrain::getOdometryPoseMeters, 
                     drivetrain.getConfig().getKinematics(), config.getxPosPID(), config.getyPosPID(), config.gettAngPID(), drivetrain::setRawModuleStates, requiredSubsystem);
                 controller.schedule();
+                BreakerLog.logBreakerLibEvent("BreakerSwerveTrajectoryAuto command instance has swiched to a new trajecotry");
             } catch (Exception e) {
                 commandIsFinished = true;
             }
@@ -69,6 +72,7 @@ public class BreakerSwerveTrajectoryAuto extends CommandBase {
         if (stopAtEnd) {
             drivetrain.stop();
         }
+        BreakerLog.logBreakerLibEvent("BreakerSwerveTrajectoryAuto command instance has ended");
     }
 
     @Override
