@@ -4,7 +4,6 @@
 
 package frc.robot.BreakerLib.devices.cosmetic;
 
-import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;

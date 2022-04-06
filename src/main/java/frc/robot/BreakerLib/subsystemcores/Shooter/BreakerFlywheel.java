@@ -11,14 +11,12 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.control.statespace.BreakerFlywheelStateSpace;
-import frc.robot.BreakerLib.devices.cosmetic.FalconOrchestra;
-import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 /** Add your docs here. */
 public class BreakerFlywheel extends SubsystemBase {
     private PIDController flyPID;
-    private SimpleMotorFeedforward flyFF;
+    //private SimpleMotorFeedforward flyFF;
     private boolean runFlywheel = false;
     private double flywheelTargetRSU = 0;
     private MotorControllerGroup flywheel;

@@ -51,6 +51,11 @@ public class LimelightTarget {
       return NetworkTableInstance.getDefault().getTable(limelight.getName()).getEntry("ty").getDouble(0);
     }
 
+    public double getTargetOffsetY() {
+      double newHeight = (targetHeight - limelight.getMountingHeight()) + targetOffsetDistY;
+      return Math.toDegrees(Math.atan((newHeight / getTargetDistance())));
+    }
+
     public double getTargetArea() {
       return NetworkTableInstance.getDefault().getTable(limelight.getName()).getEntry("ta").getDouble(0);
     }

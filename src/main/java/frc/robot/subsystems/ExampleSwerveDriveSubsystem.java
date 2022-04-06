@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.BreakerSwerveDrive;
@@ -28,12 +29,22 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
   BreakerSwerveModule leftBackModule;
   BreakerSwerveModule rightBackModule;
 
+  Translation2d leftFrontModulePosition;
+  Translation2d rightFrontModulePosition;
+  Translation2d leftBackModulePosition;
+  Translation2d rightBackModulePosition;
+
   BreakerSwerveDriveConfig driveConfig;
 
   BreakerSwerveDrive drivetrain;
 
   public ExampleSwerveDriveSubsystem(BreakerPigeon2 imu) {
-    driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+    leftFrontModulePosition = new Translation2d(x, y);
+    rightFrontModulePosition = new Translation2d(x, y);
+    leftBackModulePosition = new Translation2d(x, y);
+    rightBackModulePosition = new Translation2d(x, y);
+
+    driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, leftFrontModulePosition, rightFrontModulePosition, leftBackModulePosition, rightBackModulePosition);
     driveConfig.setPidTolerences(tolerences);
 
     driveLF = new WPI_TalonFX(0);

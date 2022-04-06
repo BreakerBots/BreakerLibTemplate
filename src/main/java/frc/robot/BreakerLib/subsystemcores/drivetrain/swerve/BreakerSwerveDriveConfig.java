@@ -4,13 +4,11 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.swerve;
 
-import edu.wpi.first.hal.simulation.AnalogInDataJNI;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 /** Add your docs here. */
 public class BreakerSwerveDriveConfig {
-    // https://jacobmisirian.gitbooks.io/frc-swerve-drive-programming/content/chapter1.html
 
     private double maxForwardVel;
     private double maxSidewaysVel;
