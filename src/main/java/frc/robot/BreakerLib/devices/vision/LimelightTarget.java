@@ -5,15 +5,20 @@
 package frc.robot.BreakerLib.devices.vision;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.BreakerLib.util.BreakerMath;
 
 /** Add your docs here. */
 public class LimelightTarget {
     private int pipelineNum;
     private double targetHeight;
     private BreakerLimelight limelight;
+    private double targetOffsetDistX = 0;
+    private double targetOffsetDistY = 0;
+    private double targetOffsetDistZ = 0;
+
     /** Creates the profile for the target of a limelight
-     * @param targetHeight the height of the intended target form the ground
-     * @param limelight the limelight used to track the intended target
+     * @param targetHeight the height of the intended target form the ground (refers to the vision target being tracked)
+     * @param limelight the limelight used to track the intended target (refers to the vision target being tracked)
      * @param pipelineNum the pipeline number (0 - 9) that the limelight needs to use to track the intended target
      */
     public LimelightTarget(double targetHeight, BreakerLimelight limelight, double pipelineNum) {
@@ -22,15 +27,27 @@ public class LimelightTarget {
       limelight = this.limelight;
     }
 
+    public void setOffsetDistanceFromVisionTarget(double offsetX, double offsetY, double offsetZ) {
+      targetOffsetDistX = offsetX;
+      targetOffsetDistY = offsetY;
+      targetOffsetDistZ = offsetZ;
+    }
+
     public double getTargetPipeline() {
       return pipelineNum;
     }
 
-    public double getTargetOffsetX() {
+    public double getRawTargetOffsetX() {
       return NetworkTableInstance.getDefault().getTable(limelight.getName()).getEntry("tx").getDouble(0);
     }
 
-    public double getTargetOffsetY() {
+    public double getTargetOffsetX() {
+      double x = Math.pow(targetOffsetDistX, 2) - Math.pow(getRawTargetDistance(), 2) - Math.pow(getTargetDistance(), 2);
+      double y = (((x / -2) / getRawTargetDistance()) / getTargetDistance());
+      return getRawTargetOffsetX() + Math.toDegrees(Math.acos(y));
+    }
+
+    public double getRawTargetOffsetY() {
       return NetworkTableInstance.getDefault().getTable(limelight.getName()).getEntry("ty").getDouble(0);
     }
 
@@ -46,9 +63,13 @@ public class LimelightTarget {
       return NetworkTableInstance.getDefault().getTable(limelight.getName()).getEntry("camtran").getDouble(0);
     }
 
-    public double getTargetDistance() {
+    public double getRawTargetDistance() {
       double camHeight = targetHeight - limelight.getMountingHeight();
-      double corTarAng = limelight.getMountingAngle() + getTargetOffsetY();
+      double corTarAng = limelight.getMountingAngle() + getRawTargetOffsetY();
       return (camHeight / Math.tan(corTarAng));
     }
+
+    public double getTargetDistance() {
+      return BreakerMath.getHypotenuse((getRawTargetDistance() + targetOffsetDistZ), targetOffsetDistX);
+    }  
   }
