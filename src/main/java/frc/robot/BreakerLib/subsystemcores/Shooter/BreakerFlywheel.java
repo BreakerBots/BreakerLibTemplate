@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.BreakerLib.control.statespace.BreakerFlywheelStateSpace;
 import frc.robot.BreakerLib.devices.cosmetic.FalconOrchestra;
 import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
@@ -21,20 +22,20 @@ public class BreakerFlywheel extends SubsystemBase {
     private boolean runFlywheel = false;
     private double flywheelTargetRSU = 0;
     private MotorControllerGroup flywheel;
-    private WPI_TalonFX rFlyMotor;
     private WPI_TalonFX lFlyMotor;
-    public BreakerFlywheel(WPI_TalonFX leftFlywheelMotor, WPI_TalonFX rightFlywheelMotor, double flywheelKp, double flywheelKi, double flywheelKd, double flywheelPosTol, double flywheelVelTol,
-        double flywheelKs, double flywheelKv, double flywheelKa) {
-        flyPID = new PIDController(flywheelKp, flywheelKi, flywheelKd);
-        flyPID.setTolerance(flywheelPosTol, flywheelVelTol);
-        flyFF = new SimpleMotorFeedforward(flywheelKs, flywheelKv, flywheelKa);
-        flywheel = new MotorControllerGroup(leftFlywheelMotor, rightFlywheelMotor);
-        lFlyMotor = leftFlywheelMotor;
-        rFlyMotor = rightFlywheelMotor;
+    private BreakerFlywheelStateSpace flySS;
+    public BreakerFlywheel(BreakerFlywheelConfig config, WPI_TalonFX leadFlywheelMotor, WPI_TalonFX... outherFlywheelMotors
+        /*, double flywheelKs, double flywheelKv, double flywheelKa */) {
+        flyPID = new PIDController(config.getFlywheelKp(), config.getFlywheelKi(), config.getFlywheelKd());
+        flyPID.setTolerance(config.getFlywheelPosTol(), config.getFlywheelVelTol());
+        //flyFF = new SimpleMotorFeedforward(flywheelKs, flywheelKv, flywheelKa);
+        flySS = new BreakerFlywheelStateSpace(config.getFlywheelGearing(), config.getFlywheelMomentOfInertiaJulesKgMetersSquared(), config.getModelKalmanTrust(), 
+        config.getEncoderKalmanTrust(), config.getLqrVelocityErrorTolerance(), config.getLqrControlEffort(), leadFlywheelMotor);
+        flywheel = new MotorControllerGroup(leadFlywheelMotor, outherFlywheelMotors);
+        lFlyMotor = leadFlywheelMotor;
     }
 
     public void setFlywheelSpeed(double flywheelTargetSpeedRPM) {
-        runFlywheel = true;
         flywheelTargetRSU = BreakerUnits.RPMtoFalconRSU(flywheelTargetSpeedRPM);
     }
 
@@ -47,16 +48,19 @@ public class BreakerFlywheel extends SubsystemBase {
     }
     public void stopFlywheel() {
         runFlywheel = false;
+        flySS.killLoop();
         flywheel.set(0);
     }
 
     public void startFlywheel() {
         runFlywheel = true;
+        flySS.restartLoop();
     }
 
     private void runFlywheel() {
         if (runFlywheel) {
-        double flySetSpd = flyPID.calculate(getFlywheelVelRSU(), flywheelTargetRSU) + (flyFF.calculate(flywheelTargetRSU) / lFlyMotor.getBusVoltage());
+        flySS.setSpeedRPM(BreakerUnits.falconRSUtoRPM(flywheelTargetRSU));
+        double flySetSpd = flyPID.calculate(getFlywheelVelRSU(), flywheelTargetRSU) + flySS.getNextPrecentSpeed(); /* (flyFF.calculate(flywheelTargetRSU) / lFlyMotor.getBusVoltage()) */;
         flywheel.set(flySetSpd);
         }
     }

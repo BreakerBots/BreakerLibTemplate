@@ -134,6 +134,10 @@ public class BreakerMath {
         return ((Double.valueOf(FixedPointVal)) / (Math.pow(2, bitsAfterDicimal)));
     }
 
+    public static double radiansPerTick(double encoderTicks) {
+        return (2.0 * Math.PI / encoderTicks);
+    }
+
 }
 
 

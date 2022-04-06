@@ -105,6 +105,15 @@ public class BreakerUnits {
         return tpm / 600;
     }
 
+    public static double falconRSUtoRPM(double rsuVal) {
+        double sp100ms = rsuVal / 2048;
+        return sp100ms * 600;
+    }
+
+    public static double falconVelRsuToRadPerSec(double encoderVelRSU) {
+        return BreakerMath.radiansPerTick(2048) * (encoderVelRSU * 10);
+    }
+
     public enum ShortDistanceUnits {
         CENTIMETER,
         MILLIMETER,
