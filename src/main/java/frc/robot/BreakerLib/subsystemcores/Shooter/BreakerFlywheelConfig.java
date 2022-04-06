@@ -17,8 +17,10 @@ public class BreakerFlywheelConfig {
     private double encoderKalmanTrust;
     private double lqrVelocityErrorTolerance;
     private double lqrControlEffort;
-    public BreakerFlywheelConfig(double flywheelKp, double flywheelKi, double flywheelKd, double flywheelPosTol, double flywheelVelTol, double flywheelGearing, double flywheelMomentOfInertiaJulesKgMetersSquared, double modelKalmanTrust, 
+    public BreakerFlywheelConfig(double flywheelKp, double flywheelKi, double flywheelKd, double flywheelPosTol, 
+    double flywheelVelTol, double flywheelGearing, double flywheelMomentOfInertiaJulesKgMetersSquared, double modelKalmanTrust, 
     double encoderKalmanTrust, double lqrVelocityErrorTolerance, double lqrControlEffort) {
+
         this.flywheelKp = flywheelKp;
         this.flywheelKi = flywheelKi;
         this.flywheelKd = flywheelKd;
