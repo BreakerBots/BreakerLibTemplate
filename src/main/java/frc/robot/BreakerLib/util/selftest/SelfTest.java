@@ -19,10 +19,8 @@ public class SelfTest extends SubsystemBase {
   private static List<BreakerGenaricDevice> devices = new ArrayList<BreakerGenaricDevice>();
   private int cyclesbetweenPerSelfCecks;
   private static boolean lastCheckPassed;
-  private static BreakerGenericDrivetrain drivetrain;
-  public SelfTest(BreakerGenericDrivetrain drivetrain, double secondsBetweenPeriodicSelfChecks) {
+  public SelfTest(double secondsBetweenPeriodicSelfChecks) {
     cyclesbetweenPerSelfCecks = (int) (secondsBetweenPeriodicSelfChecks * 50);
-    this.drivetrain = drivetrain;
   }
 
   public static void addDevice(BreakerGenaricDevice device) {
@@ -51,9 +49,6 @@ public class SelfTest extends SubsystemBase {
       lastCheckPassed = false;
       for (BreakerGenaricDevice faultDiv: faultDevices) {
         work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
-      }
-      if (drivetrain.driveHasFault()) {
-        work.append(" Drivetrain-" + drivetrain.getDriveFaults());
       }
     } else {
       work.append(" SELF CHECK PASSED ");

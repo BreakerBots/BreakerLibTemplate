@@ -15,13 +15,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerDiffDrive implements BreakerGenericDrivetrain {
+public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenaricDevice {
   private WPI_TalonFX leftLead;
   private WPI_TalonFX rightLead;
   private MotorControllerGroup leftDrive;
@@ -168,26 +169,38 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain {
   }
 
   @Override
-  public void runSelfCheck() {
+  public void runSelfTest() {
     // TODO Auto-generated method stub
     
   }
 
   @Override
-  public DeviceHealth getDriveHealth() {
+  public DeviceHealth getHealth() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public String getDriveFaults() {
+  public String getFaults() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public boolean driveHasFault() {
+  public String getDeviceName() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean hasFault() {
     // TODO Auto-generated method stub
     return false;
+  }
+
+  @Override
+  public void setDeviceName(String newName) {
+    // TODO Auto-generated method stub
+    
   }
 }

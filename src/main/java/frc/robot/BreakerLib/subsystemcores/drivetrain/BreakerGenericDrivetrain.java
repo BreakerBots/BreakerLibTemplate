@@ -25,12 +25,4 @@ public interface BreakerGenericDrivetrain {
     public abstract double[] getOdometryPosition();
 
     public abstract Pose2d getOdometryPoseMeters();
-
-    public abstract void runSelfCheck();
-
-    public abstract DeviceHealth getDriveHealth();
-
-    public abstract String getDriveFaults();
-
-    public abstract boolean driveHasFault();
 }

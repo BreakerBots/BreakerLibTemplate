@@ -9,12 +9,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
 import frc.robot.BreakerLib.devices.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerSwerveDrive implements BreakerGenericDrivetrain {
+public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGenaricDevice {
   private BreakerSwerveDriveConfig config;
   // [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight
   private SwerveModuleState[] targetModuleStates;
@@ -117,8 +118,13 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain {
     return odometer.getPoseMeters();
   }
 
+  public BreakerSwerveDriveConfig getConfig() {
+      return config;
+  }
+
   @Override
-  public void runSelfCheck() {
+  public void runSelfTest() {
+    // TODO Auto-generated method stub
     frontLeftModule.runModuleSelfCheck();
     frontRightModule.runModuleSelfCheck();
     backLeftModule.runModuleSelfCheck();
@@ -126,25 +132,33 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain {
   }
 
   @Override
-  public DeviceHealth getDriveHealth() {
+  public DeviceHealth getHealth() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public String getDriveFaults() {
+  public String getFaults() {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public boolean driveHasFault() {
+  public String getDeviceName() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean hasFault() {
     // TODO Auto-generated method stub
     return false;
   }
 
-  public BreakerSwerveDriveConfig getConfig() {
-      return config;
+  @Override
+  public void setDeviceName(String newName) {
+    // TODO Auto-generated method stub
+    
   }
 
 

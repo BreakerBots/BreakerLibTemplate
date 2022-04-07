@@ -33,13 +33,14 @@ public class RobotContainer {
 
   private final ExampleDriveSubsystem diffDrivetrain = new ExampleDriveSubsystem(pigeon2);
 
-  private final SelfTest selfTest = new SelfTest(diffDrivetrain.getBaseDrivetrain(), 5d);
+  private final SelfTest selfTest = new SelfTest(5d);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     BreakerLog.startLog(false);
     SelfTest.addDevice(pigeon2);
+    SelfTest.addDevice(diffDrivetrain.getBaseDrivetrain());
     configureButtonBindings();
   }
 
