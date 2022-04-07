@@ -8,7 +8,7 @@ import com.ctre.phoenix.Logger;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.BreakerLib.devices.BreakerPigeon2;
+import frc.robot.BreakerLib.devices.sensors.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
 import frc.robot.BreakerLib.util.BreakerLog;
 import frc.robot.BreakerLib.util.selftest.SelfTest;
