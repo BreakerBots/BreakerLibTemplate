@@ -45,7 +45,7 @@ public class ExampleSwerveDriveSubsystem extends SubsystemBase {
     rightBackModulePosition = new Translation2d(0, 0);
 
     driveConfig = new BreakerSwerveDriveConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, leftFrontModulePosition, rightFrontModulePosition, leftBackModulePosition, rightBackModulePosition);
-    driveConfig.setPidTolerences(tolerences);
+   // driveConfig.setPidTolerences(tolerences);
 
     driveLF = new WPI_TalonFX(0);
     turnLF = new WPI_TalonFX(0);
