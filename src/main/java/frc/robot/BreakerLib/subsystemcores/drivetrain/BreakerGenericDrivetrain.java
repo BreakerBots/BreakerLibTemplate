@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 /** Contianer class for methods common to all drivetrain types */
-public abstract class BreakerGenericDrivetrain {
+public interface BreakerGenericDrivetrain {
     
     public abstract void setOdometry(Pose2d poseMeters, double gyroAngle);
 

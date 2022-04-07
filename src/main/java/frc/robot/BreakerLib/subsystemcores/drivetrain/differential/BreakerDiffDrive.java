@@ -21,7 +21,7 @@ import frc.robot.BreakerLib.util.BreakerMotorControl;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerDiffDrive extends BreakerGenericDrivetrain {
+public class BreakerDiffDrive implements BreakerGenericDrivetrain {
   private WPI_TalonFX leftLead;
   private WPI_TalonFX rightLead;
   private MotorControllerGroup leftDrive;

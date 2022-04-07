@@ -7,7 +7,7 @@ package frc.robot.BreakerLib.devices;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 /** Add your docs here. */
-public abstract class BreakerGenaricDevice {
+public interface BreakerGenaricDevice {
     public abstract void runSelfTest();
 
     public abstract DeviceHealth getHealth();

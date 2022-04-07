@@ -19,7 +19,7 @@ public class BreakerLog {
     }
 
     public static void logBreakerLibEvent(String event) {
-        DataLogManager.log(" BREAKERLIB EVENT: " + event);
+        DataLogManager.log(" BREAKERLIB INTERNAL EVENT: " + event);
     }
 
     public static void logError(String error) {

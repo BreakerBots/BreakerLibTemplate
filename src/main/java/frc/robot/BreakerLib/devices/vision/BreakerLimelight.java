@@ -8,7 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerLimelight extends BreakerGenaricDevice {
+public class BreakerLimelight implements BreakerGenaricDevice {
   private double mountingAngle;
   private double mountingHeight;
   private String limelightName;

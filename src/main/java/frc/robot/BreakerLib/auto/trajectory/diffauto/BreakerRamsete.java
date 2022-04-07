@@ -10,13 +10,15 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
+import frc.robot.BreakerLib.util.BreakerLog;
 
 /** Add your docs here. */
-public class BreakerRamsete {
+public class BreakerRamsete extends CommandBase{
     private RamseteCommand ramsete;
     private RamseteController ramseteController;
     private BreakerDiffDrive drivetrain;
@@ -25,6 +27,7 @@ public class BreakerRamsete {
     private DifferentialDriveVoltageConstraint voltageConstraints;
     public BreakerRamsete(Trajectory trajectoryToFollow, BreakerDiffDrive drivetrain, 
     Subsystem subsystemRequirements, double ramseteB, double ramseteZeta, double maxVel, double maxAccel, double maxVoltage){
+        BreakerLog.logBreakerLibEvent("BreakerRamsete command instance has started, total cumulative path time: " + trajectoryToFollow.getTotalTimeSeconds());
         drivetrain = this.drivetrain;
         voltageConstraints = new DifferentialDriveVoltageConstraint(drivetrain.getFeedforward(), drivetrain.getKinematics(), maxVoltage);
         config = new TrajectoryConfig(maxVel, maxAccel);
@@ -33,5 +36,16 @@ public class BreakerRamsete {
         ramseteController = new RamseteController(ramseteB, ramseteZeta);
         ramsete = new RamseteCommand(trajectoryToFollow, drivetrain :: getOdometryPoseMeters, ramseteController, drivetrain.getFeedforward(), 
         drivetrain.getKinematics(), drivetrain :: getWheelSpeeds, drivetrain.getLeftPIDController(), drivetrain.getRightPIDController(), drivetrain :: tankMoveVoltage, subsystemRequirements);
+        ramsete.schedule();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        BreakerLog.logBreakerLibEvent("BreakerRamsete command instance has ended");
+    }
+
+    @Override
+    public boolean isFinished() {
+        return ramsete.isFinished();
     }
 }

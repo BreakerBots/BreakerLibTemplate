@@ -14,7 +14,7 @@ import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerSwerveDrive extends BreakerGenericDrivetrain {
+public class BreakerSwerveDrive implements BreakerGenericDrivetrain {
   private BreakerSwerveDriveConfig config;
   // [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight
   private SwerveModuleState[] targetModuleStates;

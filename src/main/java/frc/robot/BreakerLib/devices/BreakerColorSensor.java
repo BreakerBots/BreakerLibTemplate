@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerColorSensor extends BreakerGenaricDevice {
+public class BreakerColorSensor implements BreakerGenaricDevice {
   /** Creates a new BreakerColorSensor. */
   private DeviceHealth currentHealth = DeviceHealth.NOMINAL;
   private ColorSensorV3 colorSensor;

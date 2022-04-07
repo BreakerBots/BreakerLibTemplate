@@ -11,6 +11,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.BreakerLib.control.statespace.BreakerFlywheelStateSpace;
+import frc.robot.BreakerLib.util.BreakerLog;
 import frc.robot.BreakerLib.util.BreakerUnits;
 
 /** Add your docs here. */
@@ -48,11 +49,13 @@ public class BreakerFlywheel extends SubsystemBase {
         runFlywheel = false;
         flySS.killLoop();
         flywheel.set(0);
+        BreakerLog.logEvent("flywheel stoped");
     }
 
     public void startFlywheel() {
         runFlywheel = true;
         flySS.restartLoop();
+        BreakerLog.logEvent("flywheel started charging");
     }
 
     private void runFlywheel() {

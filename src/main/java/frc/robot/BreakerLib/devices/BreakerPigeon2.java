@@ -9,7 +9,7 @@ import frc.robot.BreakerLib.util.BreakerMath;
 import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 /* Good version of the CTRE Pigeon 2 class BAYBEEE! */
-public class BreakerPigeon2 extends BreakerGenaricDevice {
+public class BreakerPigeon2 implements BreakerGenaricDevice {
   private WPI_Pigeon2 pigeon;
   private double imuInvert;
   private DeviceHealth currentHealth = DeviceHealth.NOMINAL;

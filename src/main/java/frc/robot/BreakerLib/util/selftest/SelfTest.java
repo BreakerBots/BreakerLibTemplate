@@ -38,7 +38,7 @@ public class SelfTest extends SubsystemBase {
   }
 
   public static void runSelfCheck() {
-    StringBuilder work = new StringBuilder(" RUNNING SELF CHECK: ");
+    StringBuilder work = new StringBuilder("\n RUNNING SELF CHECK: \n");
     List<BreakerGenaricDevice> faultDevices = new ArrayList<BreakerGenaricDevice>();
     for (BreakerGenaricDevice device: devices) {
       device.runSelfTest();
@@ -47,7 +47,7 @@ public class SelfTest extends SubsystemBase {
       }
     }
     if (faultDevices.size() != 0) {
-      work.append(" SELF CHECK FAILED - FAULTS FOUND: ");
+      work.append(" SELF CHECK FAILED - FAULTS FOUND: \n");
       lastCheckPassed = false;
       for (BreakerGenaricDevice faultDiv: faultDevices) {
         work.append(" " + faultDiv.getDeviceName() + "-" + faultDiv.getFaults() + " ");
