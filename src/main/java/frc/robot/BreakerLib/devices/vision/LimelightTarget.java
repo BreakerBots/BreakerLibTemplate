@@ -4,6 +4,8 @@
 
 package frc.robot.BreakerLib.devices.vision;
 
+import org.opencv.osgi.OpenCVNativeLoader;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.BreakerLib.util.BreakerMath;
 
@@ -15,6 +17,7 @@ public class LimelightTarget {
     private double targetOffsetDistX = 0;
     private double targetOffsetDistY = 0;
     private double targetOffsetDistZ = 0;
+    private boolean targetOffsetHasBeenSet = false;
 
     /** Creates the profile for the target of a limelight
      * @param targetHeight the height of the intended target form the ground (refers to the vision target being tracked)
@@ -31,6 +34,7 @@ public class LimelightTarget {
       targetOffsetDistX = offsetX;
       targetOffsetDistY = offsetY;
       targetOffsetDistZ = offsetZ;
+      targetOffsetHasBeenSet = true;
     }
 
     public double getTargetPipeline() {
@@ -44,7 +48,7 @@ public class LimelightTarget {
     public double getTargetOffsetX() {
       double x = Math.pow(targetOffsetDistX, 2) - Math.pow(getRawTargetDistance(), 2) - Math.pow(getTargetDistance(), 2);
       double y = (((x / -2) / getRawTargetDistance()) / getTargetDistance());
-      return getRawTargetOffsetX() + Math.toDegrees(Math.acos(y));
+      return (targetOffsetHasBeenSet ? (getRawTargetOffsetX() + Math.toDegrees(Math.acos(y))) : getRawTargetOffsetX());
     }
 
     public double getRawTargetOffsetY() {
@@ -53,7 +57,7 @@ public class LimelightTarget {
 
     public double getTargetOffsetY() {
       double newHeight = (targetHeight - limelight.getMountingHeight()) + targetOffsetDistY;
-      return Math.toDegrees(Math.atan((newHeight / getTargetDistance())));
+      return (targetOffsetHasBeenSet ? (Math.toDegrees(Math.atan((newHeight / getTargetDistance())))) : getRawTargetOffsetY());
     }
 
     public double getTargetArea() {
@@ -75,6 +79,6 @@ public class LimelightTarget {
     }
 
     public double getTargetDistance() {
-      return BreakerMath.getHypotenuse((getRawTargetDistance() + targetOffsetDistZ), targetOffsetDistX);
+      return (targetOffsetHasBeenSet ? (BreakerMath.getHypotenuse((getRawTargetDistance() + targetOffsetDistZ), targetOffsetDistX)) : getRawTargetDistance());
     }  
   }

@@ -29,6 +29,9 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
   private BreakerPigeon2 pigeon2;
 
   private SwerveDriveOdometry odometer;
+
+  private String deviceName = "Swerve_Drivetrain";
+  private String faults = null;
   /** Constructs a new swerve based drivetrain
    * @param config - the confiuration values for the drivetrain's charicotristics and behavor, passed in as a "BreakerSwerveDriveConfig" object
    * @param swerveModules - The four swerve drive modules that make up the drivetrain, must be passed in the same order shown below
@@ -125,10 +128,13 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
   @Override
   public void runSelfTest() {
     // TODO Auto-generated method stub
+    faults = null;
     frontLeftModule.runModuleSelfCheck();
     frontRightModule.runModuleSelfCheck();
     backLeftModule.runModuleSelfCheck();
     backRightModule.runModuleSelfCheck();
+    faults = (" Front_Left: " + frontLeftModule.getModuleFaults() + " Front_Right: " + frontRightModule.getModuleFaults() + 
+    " Back_Left: " + backLeftModule.getModuleFaults() + " Back_Right: " + backRightModule.getModuleFaults() + " ");
   }
 
   @Override
@@ -140,24 +146,22 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
   @Override
   public String getFaults() {
     // TODO Auto-generated method stub
-    return null;
+    return faults;
   }
 
   @Override
   public String getDeviceName() {
-    // TODO Auto-generated method stub
-    return null;
+    return deviceName;
   }
 
   @Override
   public boolean hasFault() {
-    // TODO Auto-generated method stub
-    return false;
+    return (faults != null);
   }
 
   @Override
   public void setDeviceName(String newName) {
-    // TODO Auto-generated method stub
+    deviceName = newName;
     
   }
 
