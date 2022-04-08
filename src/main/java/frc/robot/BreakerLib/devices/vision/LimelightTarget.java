@@ -4,8 +4,6 @@
 
 package frc.robot.BreakerLib.devices.vision;
 
-import org.opencv.osgi.OpenCVNativeLoader;
-
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.BreakerLib.util.BreakerMath;
 

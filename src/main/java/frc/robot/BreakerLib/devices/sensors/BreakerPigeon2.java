@@ -4,10 +4,8 @@
 package frc.robot.BreakerLib.devices.sensors;
 import com.ctre.phoenix.sensors.Pigeon2_Faults;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
-import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
 import frc.robot.BreakerLib.util.BreakerMath;
-import frc.robot.BreakerLib.util.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 /* Good version of the CTRE Pigeon 2 class BAYBEEE! */
 public class BreakerPigeon2 implements BreakerGenaricDevice {
@@ -16,24 +14,24 @@ public class BreakerPigeon2 implements BreakerGenaricDevice {
   private DeviceHealth currentHealth = DeviceHealth.NOMINAL;
   private String faults = null;
   private String deviceName = "Pigeon2_IMU";
-  private double pitch;
-  private double yaw;
-  private double roll;
+  // private double pitch;
+  // private double yaw;
+  // private double roll;
   /* Coordinate array. w = angle, x = x-axis, y = y-axis */
-  private double[] wxy = new double[3];
-  private double xSpeed;
-  private double ySpeed;
-  private double zSpeed;
-  private double prevTime;
-  private int cycleCount;
-  private double XAccelBias = 0;
-  private double YAccelBias = 0;
-  private double xAccelAccum;
-  private double yAccelAccum;
+  // private double[] wxy = new double[3];
+  // private double xSpeed;
+  // private double ySpeed;
+  // private double zSpeed;
+  //private double prevTime;
+  // private int cycleCount;
+  // private double XAccelBias = 0;
+  // private double YAccelBias = 0;
+  // private double xAccelAccum;
+  // private double yAccelAccum;
   // Mike's Linear Accel prototype
-  private double yAccelBiasMike = 0.0;
-  private double yVelocityMike = 0.0;
-  private double yPostionMike = 0.0;
+  // private double yAccelBiasMike = 0.0;
+  // private double yVelocityMike = 0.0;
+  // private double yPostionMike = 0.0;
   /** Creates a new PigeonIMU object. */
   public BreakerPigeon2(int deviceID, boolean isInverted) {
     pigeon = new WPI_Pigeon2(deviceID);
@@ -51,22 +49,7 @@ public class BreakerPigeon2 implements BreakerGenaricDevice {
   public double getRoll() {
     return BreakerMath.angleModulus(pigeon.getRoll());
   }
-  /**
-   * Gets the amount of time in seconds between cycles.
-   *
-   * @return Amou
-   */
-  private double getCycleDiffTime() {
-    double curTime = RobotController.getFPGATime(); // In microseconds
-    double diffTime = curTime - prevTime;
-    prevTime = curTime;
-    diffTime = BreakerUnits.microsecondsToSeconds(diffTime);
-    return diffTime;
-  }
-  public double getPerCycle1gSpeed() {
-    return BreakerUnits.gForceToInchesPerSecondSquared(getCycleDiffTime());
-    // return (BreakerUnits.INCHES_PER_SECOND_SQUARED_IN_G * getCycleDiffTime());
-  }
+
   /** Returns raw yaw, pitch, and roll angles in an array */
   public double[] getRawAngles() {
     double[] RawYPR = new double[3];
@@ -77,6 +60,11 @@ public class BreakerPigeon2 implements BreakerGenaricDevice {
   public void reset() {
     pigeon.setYaw(0);
   }
+
+  public void set(double angle) {
+    pigeon.setYaw(angle);
+  }
+
   /** Returns accelerometer value based on given index */
   public double getGyroRates(int arrayElement) {
     double[] rawRates = new double[3];
@@ -139,19 +127,19 @@ public class BreakerPigeon2 implements BreakerGenaricDevice {
     return accelVals[arrayElement];
   }
   public double getRawIns2AccelX() {
-    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * getPerCycle1gSpeed());
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(0), 14) * 0.02);
   }
   // public double getIns2AccelX() {
   //   return getRawIns2AccelX() - getAccelXBias();
   // }
   public double getRawIns2AccelY() {
-    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * getPerCycle1gSpeed());
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(1), 14) * 0.02);
   }
   // public double getIns2AccelY() {
   //   return getRawIns2AccelY() - getAccelYBias();
   // }
   public double getRawIns2AccelZ() {
-    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * getPerCycle1gSpeed());
+    return (BreakerMath.fixedToFloat(getRawAccelerometerVals(2), 14) * 0.02);
   }
   // private void calculateGlobalPosition() {
   //   // double diffTime = 0.02;

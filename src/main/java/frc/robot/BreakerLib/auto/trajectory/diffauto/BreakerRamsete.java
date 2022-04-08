@@ -5,8 +5,6 @@
 package frc.robot.BreakerLib.auto.trajectory.diffauto;
 
 import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
@@ -22,7 +20,6 @@ public class BreakerRamsete extends CommandBase{
     private RamseteCommand ramsete;
     private RamseteController ramseteController;
     private BreakerDiffDrive drivetrain;
-    private DifferentialDriveWheelSpeeds wheelSpeeds;
     private TrajectoryConfig config;
     private DifferentialDriveVoltageConstraint voltageConstraints;
     public BreakerRamsete(Trajectory trajectoryToFollow, BreakerDiffDrive drivetrain, 

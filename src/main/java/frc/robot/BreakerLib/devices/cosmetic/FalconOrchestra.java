@@ -4,8 +4,6 @@
 
 package frc.robot.BreakerLib.devices.cosmetic;
 
-import java.util.Iterator;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
