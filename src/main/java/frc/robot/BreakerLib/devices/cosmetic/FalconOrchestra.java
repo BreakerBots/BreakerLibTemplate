@@ -4,6 +4,9 @@
 
 package frc.robot.BreakerLib.devices.cosmetic;
 
+import java.util.Iterator;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.music.Orchestra;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +22,13 @@ public class FalconOrchestra extends SubsystemBase {
     
     public FalconOrchestra() {
         orchestra = new Orchestra();
+    }
+
+    public void setOrchestraMotors(WPI_TalonFX... motors) {
+        orchestra.clearInstruments();
+        for (WPI_TalonFX motor: motors) {
+            orchestra.addInstrument(motor);
+        }
     }
     
     public void startPlaylist(String[] playlistSongFilepaths) {

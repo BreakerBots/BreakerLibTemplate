@@ -43,7 +43,7 @@ public class SelfTest extends SubsystemBase {
         faultDevices.add(device);
       }
     }
-    if (faultDevices.size() != 0) {
+    if (faultDevices.size() > 0) {
       work.append(" SELF CHECK FAILED - FAULTS FOUND: \n");
       lastCheckPassed = false;
       for (BreakerGenaricDevice faultDiv: faultDevices) {

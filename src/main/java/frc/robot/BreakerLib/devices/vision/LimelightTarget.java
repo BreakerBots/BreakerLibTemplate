@@ -73,9 +73,9 @@ public class LimelightTarget {
     }
 
     public double getRawTargetDistance() {
-      double camHeight = targetHeight - limelight.getMountingHeight();
+      double camRelHeightTgt = targetHeight - limelight.getMountingHeight();
       double corTarAng = limelight.getMountingAngle() + getRawTargetOffsetY();
-      return (camHeight / Math.tan(corTarAng));
+      return (camRelHeightTgt / Math.tan(corTarAng));
     }
 
     public double getTargetDistance() {
