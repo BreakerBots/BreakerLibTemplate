@@ -24,15 +24,20 @@ import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
 public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenaricDevice {
   private WPI_TalonFX leftLead;
-  private WPI_TalonFX rightLead;
-  private MotorControllerGroup leftDrive;
-  private MotorControllerGroup rightDrive;
   private WPI_TalonFX[] leftMotors;
+  private MotorControllerGroup leftDrive;
+
+  private WPI_TalonFX rightLead;
   private WPI_TalonFX[] rightMotors;
+  private MotorControllerGroup rightDrive;
+
   private DifferentialDrive diffDrive;
   private BreakerDiffDriveConfig driveConfig;
+
   private BreakerPigeon2 pigeon2;
   private DifferentialDriveOdometry driveOdometer;
+
+  private String deviceName = "Differential_Drivetrain";
   
   /** Creates a new West Coast Drive. */
   public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerPigeon2 pigeon2, BreakerDiffDriveConfig driveConfig) {
@@ -189,7 +194,7 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
   @Override
   public String getDeviceName() {
     // TODO Auto-generated method stub
-    return null;
+    return deviceName;
   }
 
   @Override
@@ -200,7 +205,7 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
 
   @Override
   public void setDeviceName(String newName) {
-    // TODO Auto-generated method stub
+    deviceName = newName;
     
   }
 }

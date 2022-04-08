@@ -133,19 +133,19 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
     frontRightModule.runModuleSelfCheck();
     backLeftModule.runModuleSelfCheck();
     backRightModule.runModuleSelfCheck();
+    if (frontLeftModule.moduleHasFault() || frontRightModule.moduleHasFault() || backLeftModule.moduleHasFault() || backRightModule.moduleHasFault()) {
     faults = (" Front_Left: " + frontLeftModule.getModuleFaults() + " Front_Right: " + frontRightModule.getModuleFaults() + 
     " Back_Left: " + backLeftModule.getModuleFaults() + " Back_Right: " + backRightModule.getModuleFaults() + " ");
+    }
   }
 
   @Override
   public DeviceHealth getHealth() {
-    // TODO Auto-generated method stub
-    return null;
+    return hasFault() ? DeviceHealth.FAULT : DeviceHealth.NOMINAL;
   }
 
   @Override
   public String getFaults() {
-    // TODO Auto-generated method stub
     return faults;
   }
 
