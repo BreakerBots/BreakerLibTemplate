@@ -165,7 +165,6 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
     double yPos = Units.metersToInches(basePose.getY());
     double degPos = basePose.getRotation().getDegrees();
     return new double[] { xPos, yPos, degPos };
-    
   }
 
   @Override
@@ -175,7 +174,6 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
 
   @Override
   public void runSelfTest() {
-    // TODO Auto-generated method stub
     
   }
 
