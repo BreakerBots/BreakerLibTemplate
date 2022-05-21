@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.BreakerLib.util.BreakerLog;
+import frc.robot.BreakerLib.util.BreakerRoboRIO.RobotMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    BreakerLog.logRobotStarted(5104, "BreakerBots", "Charybdis", 2022, "V3.2", "Roman Abrahamson, and Yousif Alkhalaf");
   }
 
   /**
@@ -48,7 +51,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    BreakerLog.logRobotChangedMode(RobotMode.DISABLED);
+    m_robotContainer.setDriveBreakMode(false);
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -62,6 +68,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
+    BreakerLog.logRobotChangedMode(RobotMode.AUTONOMOUS);
+    m_robotContainer.setDriveBreakMode(true);
   }
 
   /** This function is called periodically during autonomous. */
@@ -77,6 +86,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    BreakerLog.logRobotChangedMode(RobotMode.TELEOP);
+    m_robotContainer.setDriveBreakMode(true);
   }
 
   /** This function is called periodically during operator control. */
@@ -87,6 +99,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    BreakerLog.logRobotChangedMode(RobotMode.TEST);
+    m_robotContainer.setDriveBreakMode(true);
   }
 
   /** This function is called periodically during test mode. */

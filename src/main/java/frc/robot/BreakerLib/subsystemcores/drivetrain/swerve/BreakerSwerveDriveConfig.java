@@ -20,23 +20,23 @@ public class BreakerSwerveDriveConfig {
     private double moduleVelkP;
     private double moduleVelkI;
     private double moduleVelKd;
-    private double turnMotorGearRatioToOne;
+    private double moduleVelKf;
     private double driveMotorGearRatioToOne;
-    public double wheelDiameter;
-    private double velFeedForwardKs;
-    private double velFeedForwardKv;
-    private boolean tolerencesHaveBeenSet = false;
-    private double driveVelTol;
-    private double drivePosTol;
-    private double angPosTol;
-    private double angVelTol;
+    private double wheelDiameter;
+    // private double velFeedForwardKs;
+    // private double velFeedForwardKv;
+    // private boolean tolerencesHaveBeenSet = false;
+    // private double driveVelTol;
+    // private double drivePosTol;
+    // private double angPosTol;
+    // private double angVelTol;
 
     private SwerveDriveKinematics kinematics;
-    /** The overall configuration for a Breaker Swerve Drive, must be passed in. */
+    /** The overall configuration for a Breaker Swerve Driven holding all constants, must be passed in. */
     public BreakerSwerveDriveConfig(double maxForwardVel, double maxSidewaysVel, double maxAngVel, 
         double moduleAnglekP, double moduleAnglekI, double moduleAngleKd, double moduleVelkP,
-        double moduleVelkI, double moduleVelKd, double turnMotorGearRatioToOne, double driveMotorGearRatioToOne,
-        double wheelDiameter, double velFeedForwardKs, double velFeedForwardKv, Translation2d... wheelPositionsRelativeToCenter) {
+        double moduleVelkI, double moduleVelKd, double moduleVelKf, double driveMotorGearRatioToOne,
+        double wheelDiameter, Translation2d... wheelPositionsRelativeToCenter) {
 
         this.maxForwardVel = maxForwardVel;
         this.maxSidewaysVel = maxSidewaysVel;
@@ -48,35 +48,35 @@ public class BreakerSwerveDriveConfig {
         this.moduleVelkI = moduleVelkI;
         this.moduleVelkP = moduleVelkP;
         this.wheelDiameter = wheelDiameter;
-        this.turnMotorGearRatioToOne = turnMotorGearRatioToOne;
         this.driveMotorGearRatioToOne = driveMotorGearRatioToOne;
-        this.velFeedForwardKs = velFeedForwardKs;
-        this.velFeedForwardKv = velFeedForwardKv;
+        this.moduleVelKf = moduleVelKf;
+        // this.velFeedForwardKs = velFeedForwardKs;
+        // this.velFeedForwardKv = velFeedForwardKv;
 
         moduleNum = wheelPositionsRelativeToCenter.length;
         kinematics = new SwerveDriveKinematics(wheelPositionsRelativeToCenter);
     }
 
-    public void setPidTolerences(double[] tolerences) {
-        drivePosTol = tolerences[0];
-        driveVelTol = tolerences[1];
-        angPosTol = tolerences[2];
-        angVelTol = tolerences[3];
-        tolerencesHaveBeenSet = true;
-    }
+    // public void setPidTolerences(double[] tolerences) {
+    //     drivePosTol = tolerences[0];
+    //     driveVelTol = tolerences[1];
+    //     angPosTol = tolerences[2];
+    //     angVelTol = tolerences[3];
+    //     tolerencesHaveBeenSet = true;
+    // }
 
-    public double[] getPidTolerences() {
-        double[] tolerences = new double[4];
-        tolerences[0] = drivePosTol;
-        tolerences[1] = driveVelTol;
-        tolerences[2] = angPosTol;
-        tolerences[3] = angVelTol;
-        return tolerences;
-    }
+    // public double[] getPidTolerences() {
+    //     double[] tolerences = new double[4];
+    //     tolerences[0] = drivePosTol;
+    //     tolerences[1] = driveVelTol;
+    //     tolerences[2] = angPosTol;
+    //     tolerences[3] = angVelTol;
+    //     return tolerences;
+    // }
 
-    public boolean getTolerencesHaveBeenSet() {
-        return tolerencesHaveBeenSet;
-    }
+    // public boolean getTolerencesHaveBeenSet() {
+    //     return tolerencesHaveBeenSet;
+    // }
 
     public SwerveDriveKinematics getKinematics() {
         return kinematics;
@@ -110,6 +110,10 @@ public class BreakerSwerveDriveConfig {
         return moduleVelKd;
     }
 
+    public double getModuleVelKf() {
+        return moduleVelKf;
+    }
+
     public double getModuleAnglekP() {
         return moduleAnglekP;
     }
@@ -122,10 +126,6 @@ public class BreakerSwerveDriveConfig {
         return moduleAngleKd;
     }
 
-    public double getTurnMotorGearRatioToOne() {
-        return turnMotorGearRatioToOne;
-    }
-
     public double getDriveMotorGearRatioToOne() {
         return driveMotorGearRatioToOne;
     }
@@ -134,11 +134,11 @@ public class BreakerSwerveDriveConfig {
         return wheelDiameter;
     }
 
-    public double getVelFeedForwardKs() {
-        return velFeedForwardKs;
-    }
+    // public double getVelFeedForwardKs() {
+    //     return velFeedForwardKs;
+    // }
 
-    public double getVelFeedForwardKv() {
-        return velFeedForwardKv;
-    }
+    // public double getVelFeedForwardKv() {
+    //     return velFeedForwardKv;
+    // }
 }

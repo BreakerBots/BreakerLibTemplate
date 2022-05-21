@@ -9,22 +9,24 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
+import frc.robot.BreakerLib.devices.BreakerGenericDevice;
 import frc.robot.BreakerLib.devices.sensors.BreakerPigeon2;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.swervemodules.BreakerMK4iSwerveModule;
+import frc.robot.BreakerLib.subsystemcores.drivetrain.swerve.swervemodules.BreakerGenericSwerveModule;
+import frc.robot.BreakerLib.util.math.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGenaricDevice {
+public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGenericDevice {
   private BreakerSwerveDriveConfig config;
-  // [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight
+  /** [0] = frontLeft, [1] = frontRight, [2] = backLeft, [3] = backRight */
   private SwerveModuleState[] targetModuleStates;
   SwerveModuleState[] currentModuleStates;
 
-  private BreakerSwerveModule frontLeftModule;
-  private BreakerSwerveModule frontRightModule;
-  private BreakerSwerveModule backLeftModule;
-  private BreakerSwerveModule backRightModule;
+  private BreakerGenericSwerveModule frontLeftModule;
+  private BreakerGenericSwerveModule frontRightModule;
+  private BreakerGenericSwerveModule backLeftModule;
+  private BreakerGenericSwerveModule backRightModule;
 
   private BreakerPigeon2 pigeon2;
 
@@ -36,7 +38,7 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
    * @param config - the confiuration values for the drivetrain's charicotristics and behavor, passed in as a "BreakerSwerveDriveConfig" object
    * @param swerveModules - The four swerve drive modules that make up the drivetrain, must be passed in the same order shown below
    */
-  public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerPigeon2 pigeon2, BreakerSwerveModule frontLeftModule, BreakerSwerveModule frontRightModule, BreakerSwerveModule backLeftModule, BreakerSwerveModule backRightModule) {
+  public BreakerSwerveDrive(BreakerSwerveDriveConfig config, BreakerPigeon2 pigeon2, BreakerGenericSwerveModule frontLeftModule, BreakerGenericSwerveModule frontRightModule, BreakerGenericSwerveModule backLeftModule, BreakerGenericSwerveModule backRightModule) {
     odometer = new SwerveDriveOdometry(config.getKinematics(), Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]));
     this.config = config;
     this.frontLeftModule = frontRightModule;
@@ -46,6 +48,7 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
     this.pigeon2 = pigeon2;
   }
 
+  /** sets each module to match a target module state in order from front to back and left to right */
   public void setRawModuleStates(SwerveModuleState[] targetModuleStates) {
     frontLeftModule.setModuleTarget(targetModuleStates[0]);
     frontRightModule.setModuleTarget(targetModuleStates[1]);
@@ -53,7 +56,7 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
     backRightModule.setModuleTarget(targetModuleStates[3]);
   }
 
-  /** Standard drivetrain movement command, specifyes robot speed in each axis including robot rotation (radian per second). 
+  /** Standard drivetrain movement command, specifyes robot velocity in each axis including robot rotation (radian per second). 
    * All values are relative to the robot's orientation. */
   public void move(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
     ChassisSpeeds speeds = new ChassisSpeeds(forwardVelMetersPerSec, horizontalVelMetersPerSec, radPerSec);
@@ -61,21 +64,24 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
     setRawModuleStates(targetModuleStates);
   }
 
+  /** sets the target velocity of the robot to 0 in all axies */
   public void stop() {
     move(0, 0, 0);
   }
 
+  /** Equivlent to the "move()" method but with speeds being passed in as a percentage of maximum represented as a decimal (1.0 to -1.0) */
   public void moveWithPrecentImput(double forwardPercent, double horizontalPercent, double turnPercent) {
     move((forwardPercent * config.getMaxForwardVel()), (horizontalPercent * config.getMaxSidewaysVel()), (turnPercent * config.getMaxAngleVel()));
   }
 
+  /** effectivly equivlent to the "move()" mothod but with all vleocitys being passed in as movements relative to the field */
   public void moveRelativeToField(double forwardVelMetersPerSec, double horizontalVelMetersPerSec, double radPerSec) {
-    double gyroRad = Math.toRadians(pigeon2.getYaw());
-    double newFwd = forwardVelMetersPerSec * Math.cos(gyroRad) + horizontalVelMetersPerSec * Math.sin(gyroRad);
-    double newHorz = -forwardVelMetersPerSec * Math.sin(gyroRad) + horizontalVelMetersPerSec * Math.cos(gyroRad);
-    move(newFwd, newHorz, radPerSec);
+    ChassisSpeeds robotRelSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardVelMetersPerSec, horizontalVelMetersPerSec, radPerSec, getOdometryPoseMeters().getRotation());
+    targetModuleStates = config.getKinematics().toSwerveModuleStates(robotRelSpeeds);
+    setRawModuleStates(targetModuleStates);
   }
 
+  /** effectivly equivlent to the "moveRelativeToField()" method but with speeds being passed in as a percentage of maximum represented as a decimal (1.0 to -1.0) */
   public void moveWithPrecentImputRelativeToField(double forwardPercent, double horizontalPercent, double turnPercent) {
     double fwdV = forwardPercent * config.getMaxForwardVel();
     double horzV = horizontalPercent * config.getMaxSidewaysVel();
@@ -127,7 +133,6 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
 
   @Override
   public void runSelfTest() {
-    // TODO Auto-generated method stub
     faults = null;
     frontLeftModule.runModuleSelfCheck();
     frontRightModule.runModuleSelfCheck();
@@ -163,6 +168,14 @@ public class BreakerSwerveDrive implements BreakerGenericDrivetrain, BreakerGena
   public void setDeviceName(String newName) {
     deviceName = newName;
     
+  }
+
+  @Override
+  public void setDrivetrainBrakeMode(boolean isEnabled) {
+    frontLeftModule.setDriveMotorBrakeMode(isEnabled);
+    frontRightModule.setDriveMotorBrakeMode(isEnabled);
+    backLeftModule.setDriveMotorBrakeMode(isEnabled);
+    backRightModule.setDriveMotorBrakeMode(isEnabled);
   }
 
 

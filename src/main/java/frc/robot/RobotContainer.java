@@ -4,53 +4,28 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.Logger;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.BreakerLib.devices.sensors.BreakerPigeon2;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.BreakerLib.auto.trajectory.management.BreakerAutoManager;
 import frc.robot.BreakerLib.util.BreakerLog;
 import frc.robot.BreakerLib.util.selftest.SelfTest;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleDriveSubsystem;
-import frc.robot.subsystems.TestSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final TestSubsystem m_exampleSubsystem = new TestSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-  private final BreakerPigeon2 pigeon2 = new BreakerPigeon2(10, true);
-
-  private final ExampleDriveSubsystem diffDrivetrain = new ExampleDriveSubsystem(pigeon2);
-
-  private final SelfTest selfTest = new SelfTest(5d);
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private BreakerAutoManager autoManager;
   public RobotContainer() {
-    // Configure the button bindings
+    SelfTest.addDevices(null, null);
     BreakerLog.startLog(false);
-    SelfTest.addDevice(pigeon2);
-    SelfTest.addDevice(diffDrivetrain.getBaseDrivetrain());
+    autoManager = new BreakerAutoManager(null, null);
     configureButtonBindings();
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    // add your diriver imput triggered commands here
+  }
+
+  public void setDriveBreakMode(Boolean isEneabled) {
+    // populate with your base drivetrain's set brake mode call
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -58,7 +33,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return autoManager.getSelectedBaseCommandGroup();
   }
 }

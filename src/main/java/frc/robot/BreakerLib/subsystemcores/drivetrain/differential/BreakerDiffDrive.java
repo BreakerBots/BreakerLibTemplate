@@ -4,6 +4,10 @@
 
 package frc.robot.BreakerLib.subsystemcores.drivetrain.differential;
 
+import java.io.ObjectInputFilter.Config;
+
+import com.ctre.phoenix.motorcontrol.Faults;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -15,14 +19,18 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import frc.robot.BreakerLib.devices.BreakerGenaricDevice;
+import frc.robot.BreakerLib.devices.BreakerGenericDevice;
 import frc.robot.BreakerLib.devices.sensors.BreakerPigeon2;
+import frc.robot.BreakerLib.physics.Breaker3AxisForces;
+import frc.robot.BreakerLib.physics.BreakerVector2;
+import frc.robot.BreakerLib.physics.BreakerVector3;
+import frc.robot.BreakerLib.position.odometry.differential.BreakerDiffDriveState;
 import frc.robot.BreakerLib.subsystemcores.drivetrain.BreakerGenericDrivetrain;
-import frc.robot.BreakerLib.util.BreakerMotorControl;
-import frc.robot.BreakerLib.util.BreakerUnits;
+import frc.robot.BreakerLib.util.BreakerCTREMotorUtil;
+import frc.robot.BreakerLib.util.math.BreakerUnits;
 import frc.robot.BreakerLib.util.selftest.DeviceHealth;
 
-public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenaricDevice {
+public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenericDevice {
   private WPI_TalonFX leftLead;
   private WPI_TalonFX[] leftMotors;
   private MotorControllerGroup leftDrive;
@@ -38,28 +46,42 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
   private DifferentialDriveOdometry driveOdometer;
 
   private String deviceName = "Differential_Drivetrain";
+  private String faults = null;
+  private boolean hasFault = false;
+
+  private boolean isInSlowMode;
+  private boolean invertL;
+  private boolean invertR;
   
   /** Creates a new West Coast Drive. */
   public BreakerDiffDrive(WPI_TalonFX[] leftMotors, WPI_TalonFX[] rightMotors, boolean invertL, boolean invertR, BreakerPigeon2 pigeon2, BreakerDiffDriveConfig driveConfig) {
-    leftDrive = new MotorControllerGroup(leftLead, leftMotors);
-    leftDrive.setInverted(invertL);
+    this.leftMotors = leftMotors;
+    this.invertL = invertL;
     leftLead = leftMotors[0];
+    leftDrive = new MotorControllerGroup(leftMotors);
+    leftDrive.setInverted(invertL);
 
-    rightDrive = new MotorControllerGroup(rightLead, rightMotors);
-    rightDrive.setInverted(invertR);
+    this.rightMotors = rightMotors;
+    this.invertR = invertR;
     rightLead = rightMotors[0];
+    rightDrive = new MotorControllerGroup(rightMotors);
+    rightDrive.setInverted(invertR);
 
     diffDrive = new DifferentialDrive(leftDrive, rightDrive);
 
     driveOdometer = new DifferentialDriveOdometry(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]));
 
-    driveConfig = this.driveConfig;
-    leftMotors = this.leftMotors;
-    rightMotors = this.rightMotors;
+    this.driveConfig = driveConfig;
     this.pigeon2 = pigeon2;
   }
 
+  /** Standard drive command, is affected by slow mode */
   public void arcadeDrive(double netSpeed, double turnSpeed) {
+    if (isInSlowMode) {
+      netSpeed *= driveConfig.getSlowModeForwardMultiplier();
+      turnSpeed *= driveConfig.getSlowModeTurnMultiplier();
+    }
+
     diffDrive.arcadeDrive(netSpeed, turnSpeed);
   }
 
@@ -71,6 +93,7 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
     leftDrive.setVoltage(leftVoltage);
     rightDrive.setVoltage(rightVoltage);
     diffDrive.feed();
+    System.out.println("LV: " + leftVoltage + " RV: " + rightVoltage);
   }
 
   public void resetDriveEncoders() {
@@ -79,19 +102,23 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
   }
 
   public double getLeftDriveTicks() {
-    return leftLead.getSelectedSensorPosition();
+    return invertL ? -leftLead.getSelectedSensorPosition() : leftLead.getSelectedSensorPosition();
   }
 
   public double getLeftDriveInches() {
-    return getLeftDriveTicks() / driveConfig.getTicksPerInch();
+    return (getLeftDriveTicks() / driveConfig.getTicksPerInch());
   }
 
   public double getLeftDriveMeters() {
     return Units.inchesToMeters(getLeftDriveInches());
   }
 
+  public double getLeftDriveVelocityRSU() {
+    return invertL ? -leftLead.getSelectedSensorVelocity() : leftLead.getSelectedSensorVelocity();
+  }
+
   public double getRightDriveTicks() {
-    return rightLead.getSelectedSensorPosition();
+    return invertR ? -rightLead.getSelectedSensorPosition() : rightLead.getSelectedSensorPosition();
   }
 
   public double getRightDriveInches() {
@@ -102,13 +129,13 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
     return Units.inchesToMeters(getRightDriveInches());
   }
 
+  public double getRightDriveVelocityRSU() {
+    return invertR ? -rightLead.getSelectedSensorVelocity() : rightLead.getSelectedSensorVelocity();
+  }
+
   public void setDrivetrainBrakeMode(boolean isEnabled) {
-    for (WPI_TalonFX motorL: leftMotors) {
-      BreakerMotorControl.setTalonBrakeMode(motorL, isEnabled);
-    }
-    for (WPI_TalonFX motorR: rightMotors) {
-      BreakerMotorControl.setTalonBrakeMode(motorR, isEnabled);
-    }
+    BreakerCTREMotorUtil.setBrakeMode(isEnabled, leftMotors);
+    BreakerCTREMotorUtil.setBrakeMode(isEnabled, rightMotors);
   }
   
   /** Returns an instance of the drivetrain's left side lead motor */
@@ -138,12 +165,25 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds( BreakerUnits.inchesToMeters((leftLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10),
-     BreakerUnits.inchesToMeters((rightLead.getSelectedSensorVelocity() / driveConfig.getTicksPerInch()) * 10));
+    return new DifferentialDriveWheelSpeeds( BreakerUnits.inchesToMeters((getLeftDriveVelocityRSU() / driveConfig.getTicksPerInch()) * 10),
+     BreakerUnits.inchesToMeters((getRightDriveVelocityRSU() / driveConfig.getTicksPerInch()) * 10));
+  }
+
+  public void setSlowMode(boolean isEnabled) {
+    isInSlowMode = isEnabled;
+  }
+
+  public boolean isInSlowMode() {
+    return isInSlowMode;
+  }
+
+  public BreakerDiffDriveState getDiffDriveState() {
+    return new BreakerDiffDriveState(getWheelSpeeds(), getLeftDriveMeters(), getRightDriveMeters());
   }
 
   @Override
   public void setOdometry(Pose2d poseMeters, double gyroAngle) {
+    resetDriveEncoders();
     driveOdometer.resetPosition(poseMeters, Rotation2d.fromDegrees(gyroAngle));
   }
 
@@ -154,7 +194,6 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
 
   @Override
   public void updateOdometry() {
-    resetDriveEncoders();
     driveOdometer.update(Rotation2d.fromDegrees(pigeon2.getRawAngles()[0]), getLeftDriveMeters(), getRightDriveMeters());
   }
 
@@ -174,31 +213,48 @@ public class BreakerDiffDrive implements BreakerGenericDrivetrain, BreakerGenari
 
   @Override
   public void runSelfTest() {
-    
+    faults = null;
+    hasFault = false;
+    StringBuilder work = new StringBuilder();
+    for (WPI_TalonFX motorL: leftMotors) {
+      Faults motorFaults = new Faults();
+      motorL.getFaults(motorFaults);
+      if (motorFaults.hasAnyFault()) {
+        hasFault = true;
+        work.append(" MOTOR ID (" + motorL.getDeviceID() + ") FAULTS: ");
+        work.append(BreakerCTREMotorUtil.getMotorFaultsAsString(motorFaults));
+      }
+    }
+    for (WPI_TalonFX motorR: rightMotors) {
+      Faults motorFaults = new Faults();
+      motorR.getFaults(motorFaults);
+      if (motorFaults.hasAnyFault()) {
+        hasFault = true;
+        work.append(" MOTOR ID (" + motorR.getDeviceID() + ") FAULTS: ");
+        work.append(BreakerCTREMotorUtil.getMotorFaultsAsString(motorFaults));
+      }
+    }
+    faults = work.toString();
   }
 
   @Override
   public DeviceHealth getHealth() {
-    // TODO Auto-generated method stub
-    return null;
+    return hasFault ? DeviceHealth.FAULT : DeviceHealth.NOMINAL;
   }
 
   @Override
   public String getFaults() {
-    // TODO Auto-generated method stub
-    return null;
+    return faults;
   }
 
   @Override
   public String getDeviceName() {
-    // TODO Auto-generated method stub
     return deviceName;
   }
 
   @Override
   public boolean hasFault() {
-    // TODO Auto-generated method stub
-    return false;
+    return hasFault;
   }
 
   @Override
