@@ -4,19 +4,11 @@
 
 package frc.robot.BreakerLib.devices;
 
-import frc.robot.BreakerLib.util.selftest.DeviceHealth;
+import frc.robot.BreakerLib.util.power.BreakerPowerManageable;
+import frc.robot.BreakerLib.util.test.selftest.BreakerSelfTestable;
+import frc.robot.BreakerLib.util.test.selftest.BreakerSelfTestableBase;
+import frc.robot.BreakerLib.util.test.selftest.DeviceHealth;
 
 /** Base interface for all Breaker devices. */
-public interface BreakerGenericDevice {
-    public abstract void runSelfTest();
-
-    public abstract DeviceHealth getHealth();
-
-    public abstract String getFaults();
-
-    public abstract String getDeviceName();
-
-    public abstract boolean hasFault();
-
-    public abstract void setDeviceName(String newName);
+public interface BreakerGenericDevice extends BreakerPowerManageable, BreakerSelfTestable {
 }

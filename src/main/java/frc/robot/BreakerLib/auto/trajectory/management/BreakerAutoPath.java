@@ -4,13 +4,20 @@
 
 package frc.robot.BreakerLib.auto.trajectory.management;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Command;
 
-/** Add your docs here. */
+/** Represnets a Auto Path, contans the path's base {@link Command} and its name */
 public class BreakerAutoPath {
-    private SequentialCommandGroup autoPath;
+
+    private Command autoPath;
     private String pathName;
-    public BreakerAutoPath(String pathName, SequentialCommandGroup autoPath) {
+
+    /** Creates a BreakerAutoPath.
+     * 
+     * @param pathName Name of the path.
+     * @param autoPath Autopath command.
+     */
+    public BreakerAutoPath(String pathName, Command autoPath) {
         this.autoPath = autoPath;
         this.pathName = pathName;
     }
@@ -19,11 +26,12 @@ public class BreakerAutoPath {
         return pathName;
     }
 
-    public SequentialCommandGroup getBaseCommandGroup() {
+    public Command getBaseAutoPath() {
         return autoPath;
     }
 
-    public SequentialCommandGroup startPath() {
+    /** Schedules base auto path. */
+    public Command startPath() {
         autoPath.schedule();
         return autoPath;
     }

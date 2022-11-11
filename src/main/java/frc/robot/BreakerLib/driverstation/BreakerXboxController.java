@@ -4,13 +4,13 @@
 
 package frc.robot.BreakerLib.driverstation;
 
-import javax.management.loading.PrivateClassLoader;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-/** Wrapper for Xinput controllers. */
+/** Wrapper for Xbox controller inputs. */
 public class BreakerXboxController {
 
     // Xbox digital button ports
@@ -33,9 +33,13 @@ public class BreakerXboxController {
     public static final int RIGHT_Y_PORT = 5;
     // Xbox D-Pad angle constants
     public static final int DPAD_UP_ANG = 0;
+    public static final int DPAD_TOP_RIGHT_ANG = 45;
     public static final int DPAD_RIGHT_ANG = 90;
+    public static final int DPAD_BOTTOM_RIGHT_ANG = 135;
     public static final int DPAD_DOWN_ANG = 180;
+    public static final int DPAD_BOTTOM_LEFT_ANG = 225;
     public static final int DPAD_LEFT_ANG = 270;
+    public static final int DPAD_TOP_LEFT_ANG = 315;
 
     private XboxController controller;
 
@@ -51,9 +55,15 @@ public class BreakerXboxController {
     private JoystickButton backButton;
 
     private POVButton dPadUp;
+    private POVButton dPadTopRight;
     private POVButton dPadDown;
+    private POVButton dPadBottomRight;
     private POVButton dPadLeft;
+    private POVButton dPadBottomLeft;
     private POVButton dPadRight;
+    private POVButton dPadTopLeft;
+
+    private BreakerXboxControllerDeadbandConfig deadbandConfig = new BreakerXboxControllerDeadbandConfig();
 
     public BreakerXboxController(int xboxPortNum) {
         controller = new XboxController(xboxPortNum);
@@ -67,11 +77,71 @@ public class BreakerXboxController {
         rightStickButton = new JoystickButton(controller, R_STICK_PRESS_PORT);
         startButton = new JoystickButton(controller, START_PORT);
         backButton = new JoystickButton(controller, BACK_PORT);
-        
+
         dPadUp = new POVButton(controller, DPAD_UP_ANG);
+        dPadTopRight = new POVButton(controller, DPAD_TOP_RIGHT_ANG);
         dPadDown = new POVButton(controller, DPAD_DOWN_ANG);
+        dPadBottomRight = new POVButton(controller, DPAD_BOTTOM_RIGHT_ANG);
         dPadLeft = new POVButton(controller, DPAD_LEFT_ANG);
+        dPadBottomLeft = new POVButton(controller, DPAD_BOTTOM_LEFT_ANG);
         dPadRight = new POVButton(controller, DPAD_RIGHT_ANG);
+        dPadTopLeft = new POVButton(controller, DPAD_TOP_LEFT_ANG);
+    }
+
+    public void setRumble(BreakerControllerRumbleType rumbleType, double rumblePrecent) {
+        switch(rumbleType) {
+            case COARSE:
+                controller.setRumble(RumbleType.kLeftRumble, rumblePrecent);
+                break;
+            case FINE:
+                controller.setRumble(RumbleType.kRightRumble, rumblePrecent);
+                break;
+            case MIXED:
+                controller.setRumble(RumbleType.kLeftRumble, rumblePrecent);
+                controller.setRumble(RumbleType.kRightRumble, rumblePrecent);
+                break;
+            default:
+                controller.setRumble(RumbleType.kLeftRumble, rumblePrecent);
+                controller.setRumble(RumbleType.kRightRumble, rumblePrecent);
+                break;
+        }
+    }
+
+    public void configAnalogInputDeadbands(BreakerXboxControllerDeadbandConfig deadbandConfig) {
+        this.deadbandConfig = deadbandConfig;
+    }
+
+    public void setMixedRumble(double leftRumble, double rightRumble) {
+        controller.setRumble(RumbleType.kLeftRumble, leftRumble);
+        controller.setRumble(RumbleType.kRightRumble, leftRumble);
+    }
+
+    public void clearRumble() {
+        setMixedRumble(0, 0);
+    }
+
+    public double getLeftX() {
+       return MathUtil.applyDeadband(controller.getLeftX(), deadbandConfig.getLeftX());
+    }
+
+    public double getLeftY() {
+        return MathUtil.applyDeadband(controller.getLeftY(), deadbandConfig.getLeftY());
+    }
+
+    public double getRightX() {
+        return MathUtil.applyDeadband(controller.getRightX(), deadbandConfig.getRightX());
+    }
+
+    public double getRightY() {
+        return MathUtil.applyDeadband(controller.getRightY(), deadbandConfig.getRightY());
+    }
+
+    public double getLeftTriggerAxis() {
+        return MathUtil.applyDeadband(controller.getLeftTriggerAxis(), deadbandConfig.getLeftTriggerAxis());
+    }
+
+    public double getRightTriggerAxis() {
+        return MathUtil.applyDeadband(controller.getRightTriggerAxis(), deadbandConfig.getRightTriggerAxis());
     }
 
     public JoystickButton getBackButton() {
@@ -130,7 +200,23 @@ public class BreakerXboxController {
         return dPadRight;
     }
 
-    public POVButton getdPadUP() {
+    public POVButton getdPadUp() {
         return dPadUp;
+    }
+
+    public POVButton getdPadTopLeft() {
+        return dPadTopLeft;
+    }
+
+    public POVButton getdPadTopRight() {
+        return dPadTopRight;
+    }
+
+    public POVButton getdPadBottomLeft() {
+        return dPadBottomLeft;
+    }
+
+    public POVButton getdPadBottomRight() {
+        return dPadBottomRight;
     }
 }

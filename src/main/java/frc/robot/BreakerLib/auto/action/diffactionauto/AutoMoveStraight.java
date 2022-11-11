@@ -6,8 +6,8 @@ package frc.robot.BreakerLib.auto.action.diffactionauto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.BreakerLib.devices.sensors.BreakerPigeon2;
-import frc.robot.BreakerLib.subsystemcores.drivetrain.differential.BreakerDiffDrive;
+import frc.robot.BreakerLib.devices.sensors.imu.ctre.BreakerPigeon2;
+import frc.robot.BreakerLib.subsystem.cores.drivetrain.differential.BreakerDiffDrive;
 import frc.robot.BreakerLib.util.math.BreakerMath;
 
 /** Robot moves forward/back to target distance */
@@ -56,7 +56,7 @@ public class AutoMoveStraight extends CommandBase {
     double motorSpeed = auto.calculateMoveStraightPID(curDist, targetDistance);
     motorSpeed = MathUtil.clamp(motorSpeed, -speedClamp, speedClamp);
     motorSpeed += (motorSpeed > 0) ? auto.getMoveStraightFeedForward() : -auto.getMoveStraightFeedForward();
-    double turnSpeed = imu.getYaw() * -0.04;
+    double turnSpeed = -imu.getYawDegrees() * -0.04;
     driveTrain.arcadeDrive(motorSpeed, turnSpeed);
     // 1D movement back and forth
 

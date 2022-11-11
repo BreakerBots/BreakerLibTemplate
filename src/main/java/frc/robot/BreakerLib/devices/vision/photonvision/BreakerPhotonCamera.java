@@ -5,40 +5,44 @@
 package frc.robot.BreakerLib.devices.vision.photonvision;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.util.Units;
-import frc.robot.BreakerLib.position.geometry.BreakerTransform3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import frc.robot.BreakerLib.devices.BreakerGenericDeviceBase;
+import frc.robot.BreakerLib.util.power.BreakerPowerManagementConfig;
+import frc.robot.BreakerLib.util.power.DevicePowerMode;
+import frc.robot.BreakerLib.util.test.selftest.DeviceHealth;
 
 /** Photon camera */
-public class BreakerPhotonCamera {
+public class BreakerPhotonCamera extends BreakerGenericDeviceBase {
 
     private PhotonCamera camera;
-    private double cameraAngle; // Mounting angle
-    private double cameraHeightIns; // Height relative to ground. MAKE THIS METERS?
-    private double verticalFOV;
-    private double horizontalFOV;
-    private BreakerTransform3d cameraPositionRelativeToRobot; // Height relative to ground, all else relative to robot position.
+    private final String cameraName;
+    private double cameraMountPitch; // Mounting angle
+    private double cameraHeightMeters; // Height relative to ground. MAKE THIS METERS?
+    private Transform3d cameraPositionRelativeToRobot; // Height relative to ground, all else relative to robot position.
 
-    /**Creates a new camera that uses a Photonvision based computer vision algorithem
+    /**
+     * Creates a new camera that uses a PhotonVision-based computer vision
+     * algorithem
      * 
-     * @param cameraName Name of camera used to retreive data.
-     * @param verticalFOV Vertical field of view.
-     * @param horizontalFOV Horizontal field of view.
-     * @param cameraPositionRelativeToRobot Transformation between robot center and camera position (Z translation is relative to the ground).
+     * @param cameraName                    Name of camera used to retreive data.
+     * @param verticalFOV                   Vertical field of view.
+     * @param horizontalFOV                 Horizontal field of view.
+     * @param cameraPositionRelativeToRobot Transformation between robot center and
+     *                                      camera position (Z translation is
+     *                                      relative to the ground).
      */
-    public BreakerPhotonCamera(String cameraName, double verticalFOV, double horizontalFOV,
-            BreakerTransform3d cameraPositionRelativeToRobot) {
+    public BreakerPhotonCamera(String cameraName, Transform3d cameraPositionRelativeToRobot) {
         camera = new PhotonCamera(cameraName);
+        this.cameraName = cameraName;
+        deviceName = cameraName;
         this.cameraPositionRelativeToRobot = cameraPositionRelativeToRobot;
-        this.cameraAngle = cameraPositionRelativeToRobot.getRotationComponent().getPitch().getDegrees();
-        this.cameraHeightIns = Units
-                .metersToInches(cameraPositionRelativeToRobot.getTranslationComponent().getMetersZ());
-        this.verticalFOV = verticalFOV;
-        this.horizontalFOV = horizontalFOV;
-        
+        this.cameraMountPitch = cameraPositionRelativeToRobot.getRotation().getY();
+        this.cameraHeightMeters = cameraPositionRelativeToRobot.getZ();
     }
 
     /** Overall raw result from photon camera. */
@@ -51,7 +55,10 @@ public class BreakerPhotonCamera {
         return getLatestRawResult().hasTargets();
     }
 
-    /** Returns a list of all raw PhotonTrackedTargets the camera has in its field of view */
+    /**
+     * Returns a list of all raw PhotonTrackedTargets the camera has in its field of
+     * view
+     */
     public PhotonTrackedTarget[] getAllRawTrackedTargets() {
         return getLatestRawResult().targets.toArray(new PhotonTrackedTarget[getLatestRawResult().targets.size()]);
     }
@@ -61,7 +68,7 @@ public class BreakerPhotonCamera {
         return getAllRawTrackedTargets().length;
     }
 
-    /** Camera latency in milliseconds*/
+    /** Camera latency in milliseconds */
     public double getPipelineLatancyMilliseconds() {
         return getLatestRawResult().getLatencyMillis();
     }
@@ -76,36 +83,94 @@ public class BreakerPhotonCamera {
         return camera.getPipelineIndex();
     }
 
-    /** Returns the raw PhotonTrackedTarget object representing the best tracked target according to the pipeline's native sort */
+    /**
+     * Returns the raw PhotonTrackedTarget object representing the best tracked
+     * target according to the pipeline's native sort
+     */
     public PhotonTrackedTarget getBestTarget() {
         return getLatestRawResult().getBestTarget();
     }
-    
-    public double getCameraHeightIns() {
-        return cameraHeightIns;
+
+    /** Height is relative to ground in meters. */
+    public double getCameraHeight() {
+        return cameraHeightMeters;
     }
 
-    /** Returns pitch of camera. */
-    public double getCameraAngle() {
-        return cameraAngle;
+    /** Returns pitch of camera in degrees. */
+    public double getCameraPitch() {
+        return cameraMountPitch;
     }
 
-    public double getVerticalFOV() {
-        return verticalFOV;
-    }
-
-    public double getHorizontalFOV() {
-        return horizontalFOV;
-    }
-
+    /** 2d pose of camera relative to robot. */
     public Transform2d getCamPositionRelativeToRobot() {
-        return cameraPositionRelativeToRobot.get2dTransformationComponent();
+        return new Transform2d(cameraPositionRelativeToRobot.getTranslation().toTranslation2d(), cameraPositionRelativeToRobot.getRotation().toRotation2d());
     }
 
-    public void updateCamPositionRelativeToRobot(BreakerTransform3d newTransform) {
+    public Transform3d get3dCamPositionRelativeToRobot() {
+        return cameraPositionRelativeToRobot;
+    }
+
+    public void updateCamPositionRelativeToRobot(Transform3d newTransform) {
         cameraPositionRelativeToRobot = newTransform;
-        cameraAngle = newTransform.getRotationComponent().getPitch().getDegrees();
-        cameraHeightIns = Units.metersToInches(newTransform.getTranslationComponent().getMetersZ());
+        cameraMountPitch = Math.toDegrees(newTransform.getRotation().getY());
+        cameraHeightMeters = newTransform.getTranslation().getZ();
+    }
+
+    public void setLEDMode(VisionLEDMode ledMode) {
+        camera.setLED(ledMode);
+    }
+
+    public VisionLEDMode getCurrentLEDMode() {
+        return camera.getLEDMode();
+    }
+
+    @Override
+    public void runSelfTest() {
+        faultStr = null;
+        health = DeviceHealth.NOMINAL;
+        if (getPipelineLatancyMilliseconds() == 0) {
+            health = DeviceHealth.INOPERABLE;
+            faultStr = " camera_not_connected ";
+        }
+    }
+
+    @Override
+    public String getDeviceName() {
+        return cameraName;
+    }
+
+    @Override
+    // DOES NOUTHING, exists to satisfy BreakerGenericDevice Interface
+    public void setDeviceName(String newName) {}
+
+    @Override
+    public boolean isUnderAutomaticControl() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public DevicePowerMode getPowerMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DevicePowerMode managePower(BreakerPowerManagementConfig managementConfig) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void overrideAutomaticPowerManagement(DevicePowerMode manualPowerMode) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void returnToAutomaticPowerManagement() {
+        // TODO Auto-generated method stub
+        
     }
 
 }
